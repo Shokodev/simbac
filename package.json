@@ -1,0 +1,20 @@
+{
+  "name": "simbac",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "Andreas <admin@andreas-vogt.ch> (https://shokodev.ch/)",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^13.1.8",
+    "nodemon": "^2.0.12"
+  },
+  "dependencies": {
+    "bacstack": "^0.0.1-beta.14"
+  }
+}
