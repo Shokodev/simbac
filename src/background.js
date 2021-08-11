@@ -27,6 +27,7 @@ function createWindow() {
     alwaysOnTop: true,
   });
   splash.setResizable(false)
+  // eslint-disable-next-line no-undef
   splash.loadURL(path.join(__static, "loading.html"));
 
   //const loadingScreen = createSplashWindow();
@@ -35,6 +36,7 @@ function createWindow() {
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
     if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
+    // eslint-disable-next-line no-undef
     createProtocol("app");
     // Load the index.html when not in developments
     win.loadURL("app://./index.html");
@@ -45,18 +47,6 @@ function createWindow() {
   })
 }
 
-function createSplashWindow() {
-  const splash = new BrowserWindow({
-    width: 800,
-    height: 600,
-    //transparent: true,
-    frame: false,
-    alwaysOnTop: true,
-  });
-  splash.loadURL(path.join(__static, "loading.html"));
-  return splash;
-}
-
 app.whenReady().then(async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     try {
@@ -65,9 +55,12 @@ app.whenReady().then(async () => {
       console.error("Vue Devtools failed to install:", e.toString());
     }
   }
-
   createWindow();
 });
+const baci = require('./bacnet-server');
+console.log(`${baci}`);
+
+
 
 ipcMain.on("CREATE_OBJECT", (event, payload) => {
   console.log(payload);

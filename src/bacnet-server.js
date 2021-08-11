@@ -1,11 +1,14 @@
 const bacnet  = require('bacstack');
-
+const store = require('./background-store');
 const settings = {
-  deviceId: 443,
-  vendorId: 7
-};
+  deviceId: store.get('deviceId'),
+  vendorId: store.get('vendorId'),
+}
+const client = new bacnet({
+  port: store.get('port'),
+});
 
-const client = new bacnet();
+client.whoIs();
 
 const dataStore = {
   '1:0': {
@@ -29,6 +32,7 @@ const dataStore = {
 client.on('whoIs', (data) => {
   if (data.lowLimit && data.lowLimit > settings.deviceId) return;
   if (data.highLimit && data.highLimit < settings.deviceId) return;
+  console.log(`I am ${settings.deviceId}`);
   client.iAmResponse(settings.deviceId, bacnet.enum.Segmentations.SEGMENTATION_BOTH, settings.vendorId);
 });
 
@@ -49,19 +53,18 @@ client.on('readProperty', (data) => {
 client.on('writeProperty', (data) => {
   const object = dataStore[data.request.objectId.type + ':' + data.request.objectId.instance];
   if (!object) return client.errorResponse(data.address, data.service, data.invokeId, bacnet.enum.ErrorClasses.ERROR_CLASS_OBJECT, bacnet.enum.ErrorCodes.ERROR_CODE_UNKNOWN_OBJECT);
-  const property = object[data.request.property.id];
+  let property = object[data.request.property.id];
   if (!property) return client.errorResponse(data.address, data.service, data.invokeId, bacnet.enum.ErrorClasses.ERROR_CLASS_PROPERTY, bacnet.enum.ErrorCodes.ERROR_CODE_UNKNOWN_PROPERTY);
   if (data.request.property.index === 0xFFFFFFFF) {
     property = data.request.value.value;
     client.simpleAckResponse(data.address, data.service, data.invokeId);
   } else {
-    const slot = property[data.request.property.index];
+    let slot = property[data.request.property.index];
     if (!slot) return client.errorResponse(data.address, data.service, data.invokeId, bacnet.enum.ErrorClasses.ERROR_CLASS_PROPERTY, bacnet.enum.ErrorCodes.ERROR_CODE_INVALID_ARRAY_INDEX);
     slot = data.request.value.value[0];
     client.simpleAckResponse(data.address, data.service, data.invokeId);
   }
 });
-
 
 client.on('whoHas', (data) => {
   if (data.lowLimit && data.lowLimit > settings.deviceId) return;
@@ -78,10 +81,12 @@ client.on('whoHas', (data) => {
 });
 
 client.on('timeSync', (data) => {
+  console.log(`${data}`);
   // TODO: Implement
 });
 
 client.on('timeSyncUTC', (data) => {
+  console.log(`${data}`);
   // TODO: Implement
 });
 
@@ -118,8 +123,8 @@ client.on('readPropertyMultiple', (data) => {
   });
   client.readPropertyMultipleResponse('192.168.178.255', data.invokeId, responseList);
 });
-
-client.on('writePropertyMultiple', (data) => {
+/* 
+client.on('writePropertyMultiple', (data) => { 
 });
 
 client.on('atomicWriteFile', (data) => {
@@ -148,5 +153,7 @@ client.on('createObject', (data) => {
 
 client.on('deleteObject', (data) => {
 });
-
+ */
 console.log('Node BACstack Device started');
+
+module.exports = client;
