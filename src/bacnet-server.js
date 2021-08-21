@@ -1,5 +1,5 @@
 const bacnet  = require('bacstack');
-const store = require('./background-store');
+const {store} = require('./background-store');
 const settings = {
   deviceId: store.get('deviceId'),
   vendorId: store.get('vendorId'),

@@ -1,56 +1,39 @@
 <template>
-  <v-app id="inspire">
-    <v-system-bar app>
-      <v-spacer></v-spacer>
-
-      <v-icon>mdi-square</v-icon>
-
-      <v-icon>mdi-circle</v-icon>
-
-      <v-icon>mdi-triangle</v-icon>
-    </v-system-bar>
-
-    <v-navigation-drawer
-      v-model="drawer"
-      class="primary"
-      permanent
-      expand-on-hover
-      app
-    >
-      <v-list>
-        <v-list-item
-          v-for="[icon, text, to] in links"
-          :key="icon"
-          :to="to"
-          link
-        >
-          <v-list-item-icon>
-            <v-icon>{{ icon }}</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>{{ text }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-main>
-      <router-view />
-    </v-main>
+  <v-app>
+    <Toolbar />
+    <router-view />
   </v-app>
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      drawer: null,
-      links: [
-        ['mdi-gauge', 'Dashboard', '/dashboard'],
-        ['mdi-chip', 'Device', '/device'],
-        ['mdi-gamepad-square-outline', 'Simulate', '/simulate'],
-        ['mdi-cog', 'Settings','/settings'],
-        ['mdi-iframe-braces-outline', 'About', '/about'],
-      ],
-    }),
-  }
+import Toolbar from '@/components/Toolbar.vue'
+export default {
+  components: {Toolbar},
+  data: () => ({
+    links: [
+      ["mdi-gauge", "Dashboard", "/dashboard"],
+      ["mdi-chip", "Device", "/device"],
+      ["mdi-gamepad-square-outline", "Simulate", "/simulate"],
+      ["mdi-cog", "Settings", "/settings"],
+      ["mdi-iframe-braces-outline", "About", "/about"],
+    ],
+    mini: true,
+    drawer: false,
+  }),
+};
 </script>
+
+<style lang="scss">
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+::-webkit-scrollbar {
+display: none;
+}
+
+</style>

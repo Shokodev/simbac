@@ -1,8 +1,8 @@
 const {contextBridge, ipcRenderer} = require('electron')
 
-const validChannels = ['CREATE_OBJECT', 'DELETE_OBJECT']
+const validChannels = ['CREATE_DEVICE', 'DELETE_DEVICE']
 
-console.log('Preload..e')
+console.log('Preload...')
 contextBridge.exposeInMainWorld(
     'ipc', {
         send: (channel, data) => {

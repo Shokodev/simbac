@@ -10,6 +10,7 @@ function createWindow() {
     width: 1200,
     height: 800,
     show: false,
+    alwaysOnTop: true,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -57,12 +58,11 @@ app.whenReady().then(async () => {
   }
   createWindow();
 });
-const baci = require('./bacnet-server');
-console.log(`${baci}`);
+require('./bacnet-server');
 
 
 
-ipcMain.on("CREATE_OBJECT", (event, payload) => {
+ipcMain.on("CREATE_DEVICE", (event, payload) => {
   console.log(payload);
-  event.reply("object was sucessfully created");
+  event.reply("CREATE_DEVICE", "object was sucessfully created");
 });
