@@ -45,9 +45,10 @@
     data: () => ({
       drawer: null,
       links: [
-        ['mdi-inbox-arrow-down', 'Inbox', '/'],
-        ['mdi-send', 'BACnet', '/Bacnet'],
-        ['mdi-alert-octagon', 'Settings'],
+        ['mdi-gauge', 'Dashboard', '/dashboard'],
+        ['mdi-chip', 'Device', '/device'],
+        ['mdi-gamepad-square-outline', 'Simulate', '/simulate'],
+        ['mdi-cog', 'Settings','/settings'],
         ['mdi-iframe-braces-outline', 'About', '/about'],
       ],
     }),

@@ -1,11 +1,13 @@
 <template>
-  <h1 class="ma-2">Hallo</h1>
+  <v-container>
+    <h1 class="ma-2">Dashboard</h1>
+  </v-container>
 </template>
 
 <script>
 
   export default {
-    name: 'Home',
+    name: 'Dashboard',
 
     components: {
     },
