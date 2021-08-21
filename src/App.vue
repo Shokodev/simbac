@@ -46,9 +46,8 @@
       drawer: null,
       links: [
         ['mdi-inbox-arrow-down', 'Inbox', '/'],
-        ['mdi-send', 'Send'],
-        ['mdi-delete', 'Trash'],
-        ['mdi-alert-octagon', 'Spam'],
+        ['mdi-send', 'BACnet', '/Bacnet'],
+        ['mdi-alert-octagon', 'Settings'],
         ['mdi-iframe-braces-outline', 'About', '/about'],
       ],
     }),

@@ -4,7 +4,7 @@ import Vuetify from "vuetify/lib/framework";
 Vue.use(Vuetify);
 
 export default new Vuetify({
-  theme: {
+/*   theme: {
     themes: {
       light: {
         primary: "",
@@ -19,5 +19,5 @@ export default new Vuetify({
         error: "",
       },
     },
-  },
+  }, */
 });

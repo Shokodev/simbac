@@ -5,7 +5,7 @@ const settings = {
   vendorId: store.get('vendorId'),
 }
 const client = new bacnet({
-  port: store.get('port'),
+  //port: store.get('port'),
 });
 
 client.whoIs();
@@ -33,7 +33,7 @@ client.on('whoIs', (data) => {
   if (data.lowLimit && data.lowLimit > settings.deviceId) return;
   if (data.highLimit && data.highLimit < settings.deviceId) return;
   console.log(`I am ${settings.deviceId}`);
-  client.iAmResponse(settings.deviceId, bacnet.enum.Segmentations.SEGMENTATION_BOTH, settings.vendorId);
+  client.iAmResponse(settings.deviceId, bacnet.enum.Segmentation.SEGMENTATION_BOTH, settings.vendorId);
 });
 
 client.on('readProperty', (data) => {
