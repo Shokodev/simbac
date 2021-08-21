@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 import path from "path";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 const isDevelopment = process.env.NODE_ENV !== "production";
+const log = require('./logger');
 
 //Create Window and load index.html & preload.js
 function createWindow() {
@@ -53,16 +54,24 @@ app.whenReady().then(async () => {
     try {
       await installExtension(VUEJS_DEVTOOLS);
     } catch (e) {
-      console.error("Vue Devtools failed to install:", e.toString());
+      log.error("Vue Devtools failed to install:", e.toString());
     }
   }
   createWindow();
 });
-require('./bacnet-server');
 
-
+const BACnetDevice = require('./bacnet/bacnet-device');
+const device = new BACnetDevice();
 
 ipcMain.on("CREATE_DEVICE", (event, payload) => {
-  console.log(payload);
+  log.info(payload);
+  device.start();
+  device.bacstack.whoIs(); 
   event.reply("CREATE_DEVICE", "object was sucessfully created");
+});
+
+ipcMain.on("DELETE_DEVICE", (event, payload) => {
+  log.info(payload);
+  device.stop(); 
+  event.reply("DELETE_DEVICE", "object was sucessfully deleted");
 });
