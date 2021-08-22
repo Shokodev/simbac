@@ -20,9 +20,9 @@ const device = {
   dp: { type: "array", default: [] },
 };
 
-const saveSettings = (payload) => store.set("baci", payload);
-const readSettings = () => store.get("baci");
+const save = (propNam, payload) => store.set(propNam, payload);
+const read = (propName) => store.get(propName);
 
 const store = new Store({ schema: device });
 
-module.exports = { store, saveSettings, readSettings };
+module.exports = { save, read };

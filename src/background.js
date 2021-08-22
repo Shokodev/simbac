@@ -1,8 +1,9 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
+const { save, read } = require("./background-store");
 import path from "path";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 const isDevelopment = process.env.NODE_ENV !== "production";
-const log = require('./logger');
+const log = require("./logger");
 
 //Create Window and load index.html & preload.js
 function createWindow() {
@@ -28,7 +29,7 @@ function createWindow() {
     frame: false,
     alwaysOnTop: true,
   });
-  splash.setResizable(false)
+  splash.setResizable(false);
   // eslint-disable-next-line no-undef
   splash.loadURL(path.join(__static, "loading.html"));
 
@@ -43,10 +44,10 @@ function createWindow() {
     // Load the index.html when not in developments
     win.loadURL("app://./index.html");
   }
-  win.once('ready-to-show', () => {
-      splash.destroy();
-      win.show();
-  })
+  win.once("ready-to-show", () => {
+    splash.destroy();
+    win.show();
+  });
 }
 
 app.whenReady().then(async () => {
@@ -60,18 +61,37 @@ app.whenReady().then(async () => {
   createWindow();
 });
 
-const BACnetDevice = require('./bacnet/bacnet-device');
+const BACnetDevice = require("./bacnet/bacnet-device");
 const device = new BACnetDevice();
 
+ipcMain.on("GET_DEVICE", (event) => {
+  event.reply("GET_DEVICE", {
+    name: read("name"),
+    port: read("port"),
+    deviceId: read("deviceId"),
+    vendorId: read("vendorId"),
+    dp: read("dp"),
+    isRunning: device.bacstack ? true : false,
+  });
+});
+
 ipcMain.on("CREATE_DEVICE", (event, payload) => {
-  log.info(payload);
-  device.start();
-  device.bacstack.whoIs(); 
-  event.reply("CREATE_DEVICE", "object was sucessfully created");
+  try {
+    log.info("Save device settings");
+    save("name", payload.name);
+    save("port", parseInt(payload.port));
+    save("deviceId", parseInt(payload.deviceId));
+    save("vendorId", parseInt(payload.vendorId));
+    let result = device.start();
+    device.bacstack.whoIs();
+    event.reply("CREATE_DEVICE", result);
+  } catch (err) {
+    event.reply("CREATE_DEVICE", err);
+  }
 });
 
 ipcMain.on("DELETE_DEVICE", (event, payload) => {
   log.info(payload);
-  device.stop(); 
-  event.reply("DELETE_DEVICE", "object was sucessfully deleted");
+  let result = device.stop();
+  event.reply("DELETE_DEVICE", result);
 });

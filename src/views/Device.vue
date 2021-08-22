@@ -1,31 +1,92 @@
 <template>
   <v-container>
-    <h1 class="ma-2">Device</h1>
-    <v-btn @click="start">Start</v-btn>
-    <v-btn @click="stop">Stop</v-btn>
+    <v-card v-if="device" class="text-left">
+      <v-card-title>{{ device.name }}</v-card-title>
+      <v-card-text>
+        <div>Port: {{ device.port }}</div>
+        <div>Device ID: {{ device.deviceId }}</div>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn @click="start" :color="isStarted ? 'green' : ''">Run</v-btn>
+        <v-btn @click="stop" :color="isStarted ? '' : 'red'">Stop</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn @click="deviceSettings = true" v-if="!isStarted"
+          >Device Settings</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+    <AlertBox
+      v-if="alert"
+      :showDialog="alert"
+      :text="errorText"
+      type="error"
+      @confirm="alertEvent($event)"
+    />
+    <DeviceSettings
+      v-if="deviceSettings"
+      :showDialog="deviceSettings"
+      :device="device"
+      @save="deviceSettingsEvent($event)"
+    />
   </v-container>
 </template>
 
 <script>
+import AlertBox from "@/components/AlertBox.vue";
+import DeviceSettings from "@/components/DeviceSettings.vue";
 
-  export default {
-    name: 'Device',
-
-    mounted() {
-        window.ipc.on('CREATE_DEVICE',(e) => {
-          console.log(e)
-        });
-        window.ipc.on('DELETE_DEVICE',(e) => {
-          console.log(e)
-        });
-    },
-    methods: {
-      start() {
-        window.ipc.send('CREATE_DEVICE', 'pls create me')
-      },
-      stop() {
-        window.ipc.send('DELETE_DEVICE', 'pls delete me')
+export default {
+  name: "Device",
+  components: {
+    AlertBox,
+    DeviceSettings,
+  },
+  data: () => ({
+    alert: false,
+    errorText: "",
+    isStarted: false,
+    device: null,
+    deviceSettings: false,
+  }),
+  mounted() {
+    window.ipc.on("CREATE_DEVICE", (e) => {
+      if (e !== "started") {
+        this.errorText = e;
+        this.alert = true;
+      } else {
+        this.isStarted = true;
       }
-    }
-  }
+    });
+    window.ipc.on("DELETE_DEVICE", (e) => {
+      if (e !== "stopped") {
+        this.errorText = e;
+        this.alert = true;
+      } else {
+        this.isStarted = false;
+      }
+    });
+    window.ipc.send("GET_DEVICE");
+    window.ipc.on("GET_DEVICE", (device) => {
+      this.device = device;
+      this.isStarted = device.isRunning;
+    });
+  },
+  methods: {
+    start() {
+      window.ipc.send("CREATE_DEVICE", this.device);
+      window.ipc.send("GET_DEVICE");
+    },
+    stop() {
+      window.ipc.send("DELETE_DEVICE", "pls delete me");
+    },
+    alertEvent() {
+      this.alert = false;
+      this.errorText = "";
+    },
+    deviceSettingsEvent(d) {
+      this.deviceSettings = false;
+      if (d) this.device = d;
+    },
+  },
+};
 </script>
