@@ -14,6 +14,7 @@
           >Device Settings</v-btn
         >
       </v-card-actions>
+      <div>{{device.dp}}</div>
     </v-card>
     <AlertBox
       v-if="alert"

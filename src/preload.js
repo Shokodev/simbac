@@ -1,6 +1,6 @@
 const log = require("./logger");
 const { contextBridge, ipcRenderer } = require("electron");
-const validChannels = ["CREATE_DEVICE", "DELETE_DEVICE", "GET_DEVICE"];
+const validChannels = ["CREATE_DEVICE", "DELETE_DEVICE", "GET_DEVICE","UPDATE_DPS"];
 
 console.log("Preload...");
 contextBridge.exposeInMainWorld("ipc", {

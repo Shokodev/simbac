@@ -84,9 +84,23 @@ ipcMain.on("CREATE_DEVICE", (event, payload) => {
     save("vendorId", parseInt(payload.vendorId));
     let result = device.start();
     device.bacstack.whoIs();
+    // Read Device Object
+    device.bacstack.readProperty('localhost', {type: 0, instance: 1}, 85, (err, value) => {
+      console.log('value: ', value);
+    });
     event.reply("CREATE_DEVICE", result);
   } catch (err) {
     event.reply("CREATE_DEVICE", err);
+  }
+});
+
+ipcMain.on("UPDATE_DPS", (event, payload) => {
+  try {
+    log.info("Update datapoints");
+    save("dp", payload);
+    event.reply("UPDATE_DPS", "OK");
+  } catch (err) {
+    event.reply("UPDATE_DPS", err);
   }
 });
 

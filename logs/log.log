@@ -4,3 +4,7 @@
 2021-08-22 18:09:39:939 error: Device starting failed: Stack is already running!
 2021-08-22 18:18:25:1825 error: Device starting failed: Stack is already running!
 2021-08-22 19:09:38:938 error: Device starting failed: Stack is already running!
+2021-08-22 20:27:26:2726 error: Device starting failed: Stack is already running!
+2021-08-22 20:55:36:5536 error: Device starting failed: TypeError: Expected `key` to be of type `string` or `object`, got undefined
+2021-08-22 20:57:08:578 error: Device starting failed: TypeError: Expected `key` to be of type `string` or `object`, got undefined
+2021-08-22 21:14:33:1433 error: Device starting failed: Stack is already running!

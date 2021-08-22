@@ -1,15 +1,17 @@
 const bacnet = require("bacstack");
 const log = require("../logger");
-const { read } = require("../background-store");
+const { read, save } = require("../background-store");
 
-const dataStore = {
-  "1:0": {
+const dataStore = [
+  { 
+    id: "1:0",
     75: [{ value: { type: 1, instance: 0 }, type: 12 }], // PROP_OBJECT_IDENTIFIER
     77: [{ value: "Analog Output 1", type: 7 }], // PROP_OBJECT_NAME
     79: [{ value: 1, type: 9 }], // PROP_OBJECT_TYPE
     85: [{ value: 5, type: 4 }], // PROP_PRESENT_VALUE
   },
-  "8:443": {
+  {
+    id: "8:443",
     75: [{ value: { type: 8, instance: 443 }, type: 12 }], // PROP_OBJECT_IDENTIFIER
     76: [
       { value: { type: 8, instance: 443 }, type: 12 },
@@ -19,13 +21,13 @@ const dataStore = {
     79: [{ value: 8, type: 9 }], // PROP_OBJECT_TYPE
     28: [{ value: "Test Device #443", type: 7 }], // PROP_DESCRIPTION
   },
-};
+];
 
 function createStack() {
   const bacstack = new bacnet({
     port: read("port"),
   });
-
+  save('dp',dataStore);
   bacstack.on("whoIs", (data) => {
     if (data.lowLimit && data.lowLimit > read("deviceId")) return;
     if (data.highLimit && data.highLimit < read("deviceId")) return;
@@ -40,25 +42,24 @@ function createStack() {
     let object = read("dp")
       .find(
         (datapoint) =>
-          datapoint.objectId.type === data.request.objectId.type &&
-          datapoint.objectId.instance === data.request.objectId.instance
+          datapoint.id === `${data.request.objectId.instance}:${data.request.objectId.type}`
       );
     if (!object)
       return bacstack.errorResponse(
         data.address,
-        bacnet.enum.ConfirmedServices.SERVICE_CONFIRMED_READ_PROPERTY,
+        bacnet.enum.ConfirmedServiceChoice.READ_PROPERTY,
         data.invokeId,
-        bacnet.enum.ErrorClasses.ERROR_CLASS_OBJECT,
-        bacnet.enum.ErrorCodes.ERROR_CODE_UNKNOWN_OBJECT
+        0,
+        0
       );
     const property = object[data.request.property.id];
     if (!property)
       return bacstack.errorResponse(
         data.address,
-        bacnet.enum.ConfirmedServices.SERVICE_CONFIRMED_READ_PROPERTY,
+        bacnet.enum.ConfirmedServiceChoice.READ_PROPERTY,
         data.invokeId,
-        bacnet.enum.ErrorClasses.ERROR_CLASS_PROPERTY,
-        bacnet.enum.ErrorCodes.ERROR_CODE_UNKNOWN_PROPERTY
+        0,
+        0
       );
     if (data.request.property.index === 0xffffffff) {
       bacstack.readPropertyResponse(
@@ -73,10 +74,10 @@ function createStack() {
       if (!slot)
         return bacstack.errorResponse(
           data.address,
-          bacnet.enum.ConfirmedServices.SERVICE_CONFIRMED_READ_PROPERTY,
+          bacnet.enum.ConfirmedServiceChoice.READ_PROPERTY,
           data.invokeId,
-          bacnet.enum.ErrorClasses.ERROR_CLASS_PROPERTY,
-          bacnet.enum.ErrorCodes.ERROR_CODE_INVALID_ARRAY_INDEX
+          0,
+          0
         );
       bacstack.readPropertyResponse(
         data.address,
@@ -92,8 +93,7 @@ function createStack() {
     let object = read("dp")
       .find(
         (datapoint) =>
-          datapoint.objectId.type === data.request.objectId.type &&
-          datapoint.objectId.instance === data.request.objectId.instance
+          datapoint.id === `${datapoint.objectId.type}:${data.request.objectId.instance}`
       );
     if (!object)
       return bacstack.errorResponse(
@@ -229,4 +229,5 @@ client.on('deleteObject', (data) => {
  */
   return bacstack;
 }
+
 module.exports = { createStack };
