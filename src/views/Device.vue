@@ -34,6 +34,7 @@
 <script>
 import AlertBox from "@/components/AlertBox.vue";
 import DeviceSettings from "@/components/DeviceSettings.vue";
+import { mapActions } from 'vuex'
 
 export default {
   name: "Device",
@@ -54,6 +55,7 @@ export default {
         this.errorText = e;
         this.alert = true;
       } else {
+        this.READ_ESTORE();
         this.isStarted = true;
       }
     });
@@ -65,19 +67,16 @@ export default {
         this.isStarted = false;
       }
     });
-    window.ipc.send("GET_DEVICE");
-    window.ipc.on("GET_DEVICE", (device) => {
-      this.device = device;
-      this.isStarted = device.isRunning;
-    });
+    this.READ_ESTORE();
+    this.device = this.$store.state.device
+    this.isStarted = this.$store.state.device.isRunning || false
   },
   methods: {
     start() {
       window.ipc.send("CREATE_DEVICE", this.device);
-      window.ipc.send("GET_DEVICE");
     },
     stop() {
-      window.ipc.send("DELETE_DEVICE", "pls delete me");
+      window.ipc.send("DELETE_DEVICE", "STOP");
     },
     alertEvent() {
       this.alert = false;
@@ -87,6 +86,7 @@ export default {
       this.deviceSettings = false;
       if (d) this.device = d;
     },
+    ...mapActions(['READ_ESTORE'])
   },
 };
 </script>

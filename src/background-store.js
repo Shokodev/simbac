@@ -20,7 +20,7 @@ const device = {
   dp: { type: "array", default: [] },
 };
 
-const save = (propNam, payload) => store.set(propNam, payload);
+const save = (propName, payload) => store.set(propName, payload);
 const read = (propName) => store.get(propName);
 
 const store = new Store({ schema: device });

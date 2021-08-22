@@ -7,6 +7,8 @@
 
 <script>
 import Toolbar from '@/components/Toolbar.vue'
+import { mapActions } from 'vuex'
+
 export default {
   components: {Toolbar},
   data: () => ({
@@ -20,6 +22,13 @@ export default {
     mini: true,
     drawer: false,
   }),
+  mounted(){
+    this.READ_ESTORE();
+  },
+  methods:{
+    ...mapActions(["READ_ESTORE"])
+  }
+
 };
 </script>
 
