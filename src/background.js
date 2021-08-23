@@ -85,9 +85,14 @@ ipcMain.on("CREATE_DEVICE", (event, payload) => {
     let result = device.start();
     device.bacstack.whoIs();
     // Read Device Object
-    device.bacstack.readProperty('localhost', {type: 0, instance: 1}, 85, (err, value) => {
-      console.log('value: ', value);
-    });
+    device.bacstack.readProperty(
+      "localhost",
+      { type: 2, instance: 0 },
+      85,
+      (err, value) => {
+        console.log("value: ", value);
+      }
+    );
     event.reply("CREATE_DEVICE", result);
   } catch (err) {
     event.reply("CREATE_DEVICE", err);

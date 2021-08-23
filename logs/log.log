@@ -1,10 +1,4 @@
-2021-08-22 17:52:00:520 error: Device starting failed: Stack is already running!
-2021-08-22 17:52:15:5215 error: Device stopping failed: Stack was already stopped!
-2021-08-22 18:08:06:86 error: Device starting failed: Stack is already running!
-2021-08-22 18:09:39:939 error: Device starting failed: Stack is already running!
-2021-08-22 18:18:25:1825 error: Device starting failed: Stack is already running!
-2021-08-22 19:09:38:938 error: Device starting failed: Stack is already running!
-2021-08-22 20:27:26:2726 error: Device starting failed: Stack is already running!
-2021-08-22 20:55:36:5536 error: Device starting failed: TypeError: Expected `key` to be of type `string` or `object`, got undefined
-2021-08-22 20:57:08:578 error: Device starting failed: TypeError: Expected `key` to be of type `string` or `object`, got undefined
-2021-08-22 21:14:33:1433 error: Device starting failed: Stack is already running!
+2021-08-23 22:13:36:1336 warn: Store has already Datapoint with oid: 20
+2021-08-23 22:13:38:1338 warn: Store has already Datapoint with oid: 20
+2021-08-23 22:13:39:1339 warn: Store has already Datapoint with oid: 20
+2021-08-23 22:13:47:1347 warn: Store has already Datapoint with oid: 20
