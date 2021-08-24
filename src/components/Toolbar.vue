@@ -4,11 +4,7 @@
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       <v-spacer></v-spacer>
 
-      <v-icon>mdi-square</v-icon>
-
-      <v-icon>mdi-circle</v-icon>
-
-      <v-icon>mdi-triangle</v-icon>
+      <v-icon :color="running.color" v-if="this.$store.state.device">{{running.icon}}</v-icon>
     </v-toolbar>
 
     <v-navigation-drawer
@@ -39,6 +35,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
   name: "toolbar",
   data: () => ({
@@ -49,14 +46,23 @@ export default {
       ["mdi-cog", "Settings", "/settings"],
       ["mdi-iframe-braces-outline", "About", "/about"],
     ],
+    bacnetStackRunning: {icon: 'mdi-square', color: 'green'},
+    bacnetStackStopped: {icon: 'mdi-circle', color: 'red' },
     mini: true,
     drawer: false,
   }),
+
+  computed: {
+    running: function (){
+      return this.GET_IS_RUNNING ? this.bacnetStackRunning : this.bacnetStackStopped
+    },
+    ...mapGetters(['GET_IS_RUNNING'])
+  }
 };
 </script>
 
 <style>
 .v-list {
-    padding: 0 !important
+  padding: 0 !important;
 }
 </style>

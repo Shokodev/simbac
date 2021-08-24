@@ -1,21 +1,32 @@
 <template>
   <v-container>
-    <v-card v-if="device" class="text-left">
-      <v-card-title>{{ device.name }}</v-card-title>
+    <base-card v-if="device" color="primary" full-header>
+      <template #heading>
+        <div class="pa-8 white--text">
+          <div class="text-h4 font-weight-light">
+            BACnet Device
+          </div>
+          <div class="text-caption">
+            {{ device.name }}
+          </div>
+        </div>
+      </template>
       <v-card-text>
         <div>Port: {{ device.port }}</div>
         <div>Device ID: {{ device.deviceId }}</div>
       </v-card-text>
-      <v-card-actions>
-        <v-btn @click="start" :color="isStarted ? 'green' : ''">Run</v-btn>
-        <v-btn @click="stop" :color="isStarted ? '' : 'red'">Stop</v-btn>
+            <v-card-actions>
+        <v-btn @click="start" :color="running ? 'green' : ''">Run</v-btn>
+        <v-btn @click="stop" :color="!running ? 'red' : ''">Stop</v-btn>
         <v-spacer></v-spacer>
-        <v-btn @click="deviceSettings = true" v-if="!isStarted"
+        <v-btn @click="deviceSettings = true" v-if="!running"
           >Device Settings</v-btn
         >
       </v-card-actions>
-      <div>{{device.dp}}</div>
-    </v-card>
+    </base-card>
+
+      
+
     <AlertBox
       v-if="alert"
       :showDialog="alert"
@@ -33,22 +44,25 @@
 </template>
 
 <script>
+import BaseCard from "@/components/BaseCard";
 import AlertBox from "@/components/AlertBox.vue";
 import DeviceSettings from "@/components/DeviceSettings.vue";
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Device",
   components: {
     AlertBox,
     DeviceSettings,
+    BaseCard,
   },
   data: () => ({
     alert: false,
     errorText: "",
-    isStarted: false,
     device: null,
     deviceSettings: false,
+    bacnetStackRunning: { state: true, color: "green" },
+    bacnetStackStopped: { state: false, color: "red" },
   }),
   mounted() {
     window.ipc.on("CREATE_DEVICE", (e) => {
@@ -57,7 +71,7 @@ export default {
         this.alert = true;
       } else {
         this.READ_ESTORE();
-        this.isStarted = true;
+        this.SET_IS_RUNNING(true);
       }
     });
     window.ipc.on("DELETE_DEVICE", (e) => {
@@ -65,12 +79,11 @@ export default {
         this.errorText = e;
         this.alert = true;
       } else {
-        this.isStarted = false;
+        this.SET_IS_RUNNING(false);
       }
     });
     this.READ_ESTORE();
-    this.device = this.$store.state.device
-    this.isStarted = this.$store.state.device.isRunning || false
+    this.device = this.$store.state.device;
   },
   methods: {
     start() {
@@ -87,7 +100,14 @@ export default {
       this.deviceSettings = false;
       if (d) this.device = d;
     },
-    ...mapActions(['READ_ESTORE'])
+    ...mapActions(["READ_ESTORE", "SET_IS_RUNNING"]),
+  },
+  computed: {
+    running: function() {
+      return this.GET_IS_RUNNING;
+    },
+
+    ...mapGetters(["GET_IS_RUNNING"]),
   },
 };
 </script>
