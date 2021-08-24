@@ -27,7 +27,7 @@
 
       
 
-    <AlertBox
+    <base-alert-box
       v-if="alert"
       :showDialog="alert"
       :text="errorText"
@@ -44,17 +44,13 @@
 </template>
 
 <script>
-import BaseCard from "@/components/BaseCard";
-import AlertBox from "@/components/AlertBox.vue";
 import DeviceSettings from "@/components/DeviceSettings.vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Device",
   components: {
-    AlertBox,
     DeviceSettings,
-    BaseCard,
   },
   data: () => ({
     alert: false,

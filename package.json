@@ -47,7 +47,8 @@
     "vue-cli-plugin-electron-builder": "~2.1.1",
     "vue-cli-plugin-vuetify": "~2.4.2",
     "vue-template-compiler": "^2.6.11",
-    "vuetify-loader": "^1.7.0"
+    "vuetify-loader": "^1.7.0",
+    "webfontloader": "^1.6.28"
   },
   "eslintConfig": {
     "root": true,

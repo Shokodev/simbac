@@ -1,5 +1,5 @@
 <template>
-  <app-card v-bind="$attrs" class="v-card--material mt-4">
+  <app-card v-bind="$attrs" class="mt-4">
     <v-card-title class="align-start">
       <v-sheet
         :color="color"
@@ -58,7 +58,7 @@
 <script>
 import AppCard from "@/components/app/Card";
 export default {
-  name: "BaseCard",
+  name: "Card",
   components: {
     AppCard,
   },
@@ -90,9 +90,5 @@ export default {
 </script>
 
 <style lang="sass">
-.v-card.v-card--material
-  > .v-card__title
-    > .v-card--material__title
-      flex: 1 1 auto
-      word-break: break-word
+
 </style>

@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-if="dialog" v-model="dialog" max-width="400px" persistent>
     <v-card class="pa-8">
-      <v-alert text class="text-left" :type="type || 'success'"
+      <v-alert text class="text-left" :type="type"
         >{{ text }}
       </v-alert>
       <v-btn
@@ -24,10 +24,22 @@
 export default {
   name: "AlertBox",
   props: {
-    showDialog: Boolean,
-    text: String,
-    hasCancel: Boolean,
-    type: String,
+    showDialog: {
+      type: Boolean,
+      default: true,
+    },
+    text: {
+      type: String,
+      default: "",
+    },
+    hasCancel: {
+      type: Boolean,
+      default: true,
+    },
+    type: {
+      type: String,
+      default: "alert",
+    },
   },
   data() {
     return {
