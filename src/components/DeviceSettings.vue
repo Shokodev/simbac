@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="600px">
     <v-card>
-      <v-card-title class="headline">Devite Settings</v-card-title>
+      <v-card-title class="headline">Device Settings</v-card-title>
       <v-card-text>
         <v-container>
           <v-row>

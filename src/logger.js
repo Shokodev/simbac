@@ -1,4 +1,27 @@
+const Transport = require('winston-transport');
 const { createLogger, transports, format } = require('winston');
+const window = require('electron').BrowserWindow;
+
+class ConsoleFrontend extends Transport {
+  constructor(opts) {
+    super(opts);
+  }
+
+  log(info,callback) {
+    setImmediate(() => {
+      this.emit('logged', info);
+    });
+    let win = window.getFocusedWindow();
+    win.webContents.send('CONSOLE_MSG', {
+      level:info.level,
+      message:info.message,
+      timestamp:info.timestamp,
+    });
+    if(callback){
+      callback();
+    }
+  }
+}
 
 const logger = createLogger({
     format: format.combine(
@@ -14,6 +37,7 @@ const logger = createLogger({
             level: 'warn',
         }),
         new transports.Console(),
+        new ConsoleFrontend(),
     ]
 });
 

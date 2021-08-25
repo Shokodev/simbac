@@ -24,9 +24,12 @@ export default {
   }),
   mounted(){
     this.READ_ESTORE();
+    window.ipc.on("CONSOLE_MSG", (msg) => {
+        this.CONSOLE_MSG(msg);
+    });
   },
   methods:{
-    ...mapActions(["READ_ESTORE"])
+    ...mapActions(["READ_ESTORE","CONSOLE_MSG"])
   }
 
 };

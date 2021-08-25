@@ -5,7 +5,7 @@ const { read, save } = require("../background-store");
 const addDp = (bacnetObject) => {
   let dps = read("dp");
   if (dps.find((dp) => dp.oid === bacnetObject.oid))
-    throw Error(`Store has already Datapoint with oid: ${bacnetObject.oid}`);
+    throw Error(`Store has already datapoint with oid: ${bacnetObject.oid}`);
   dps.push(bacnetObject);
   save("dp", dps);
 };
@@ -17,7 +17,7 @@ function createStack() {
 
   // create sample data
   let ex1 = new BacnetObject(2, 0); //ANALOG_VALUE
-  ex1.setProperty(85, 10.23); //PRESENT_VALUE
+  ex1.setProperty(85, 14.434); //PRESENT_VALUE
   try {
     addDp(ex1);
   } catch (err) {
@@ -25,6 +25,7 @@ function createStack() {
   }
 
   bacstack.on("whoIs", (data) => {
+    log.info(`WhoIs request from: ${data.address}`);
     if (data.lowLimit && data.lowLimit > read("deviceId")) return;
     if (data.highLimit && data.highLimit < read("deviceId")) return;
     bacstack.iAmResponse(
@@ -34,7 +35,9 @@ function createStack() {
     );
   });
 
+  //TODO DEFINE ERROR RESPONSE
   bacstack.on("readProperty", (data) => {
+    log.info(`Read property [${data.request.property.id}] request from: ${data.address}`);
     let object = read("dp").find(
       (datapoint) =>
         datapoint.oid ===
@@ -49,8 +52,7 @@ function createStack() {
         0
       );
 
-    //TODO see Type for Property
-    const property = object[data.request.property.id];
+    const property = object.properties.filter(property=>property.id == data.request.property.id)
     if (!property)
       return bacstack.errorResponse(
         data.address,
@@ -82,7 +84,7 @@ function createStack() {
         data.invokeId,
         data.request.objectId,
         data.request.property,
-        [slot]
+        slot
       );
     }
   });
@@ -129,10 +131,15 @@ function createStack() {
   });
 
   bacstack.on("whoHas", (data) => {
+    log.info(`WhoHas request from: ${data.address}`);
     if (data.lowLimit && data.lowLimit > read("deviceId")) return;
     if (data.highLimit && data.highLimit < read("deviceId")) return;
     if (data.objId) {
-      var object = dataStore[data.objId.type + ":" + data.objId.instance];
+      let object = read("dp").find(
+        (datapoint) =>
+          datapoint.oid ===
+          `${data.request.objectId.type}${data.request.objectId.instance}`
+      );
       if (!object) return;
       bacstack.iHaveResponse(
         read("deviceId"),

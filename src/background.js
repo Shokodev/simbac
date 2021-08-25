@@ -78,6 +78,7 @@ ipcMain.on("GET_DEVICE", (event) => {
 ipcMain.on("CREATE_DEVICE", (event, payload) => {
   try {
     log.info("Save device settings");
+
     save("name", payload.name);
     save("port", parseInt(payload.port));
     save("deviceId", parseInt(payload.deviceId));
@@ -89,8 +90,8 @@ ipcMain.on("CREATE_DEVICE", (event, payload) => {
       "localhost",
       { type: 2, instance: 0 },
       85,
-      (err, value) => {
-        console.log("value: ", value);
+      (err, data) => {
+      log.info(`Found value: ${data.values[0].value}`);
       }
     );
     event.reply("CREATE_DEVICE", result);
@@ -114,3 +115,5 @@ ipcMain.on("DELETE_DEVICE", (event, payload) => {
   let result = device.stop();
   event.reply("DELETE_DEVICE", result);
 });
+
+

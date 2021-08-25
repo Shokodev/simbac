@@ -30,19 +30,19 @@ class BacnetObject {
     this.oid = `${_type}${_instance}`;
     this.properties = [
       {
-        pid: 75,
+        id: 75,
         pidName: "OBJECT_IDENTIFIER",
         value: { type: _type, instance: _instance },
         type: 12,
       },
       {
-        pid: 77,
+        id: 77,
         pidName: "OBJECT_NAME",
         value: getCleanType(object_types[_type], _instance),
         type: 7,
       },
       {
-        pid: 79,
+        id: 79,
         pidName: "OBJECT_TYPE",
         value: _type,
         type: 9,
@@ -60,10 +60,11 @@ class BacnetObject {
 
   setProperty(_pid = Number, value) {
     if (!pids[_pid]) throw TypeError("Unknown PropertyIdentifier");
-    //TDODO There is no validation for property value type
+    //TODO There is no validation for property value type
     this.properties.push({
-      pid: _pid,
+      id: _pid,
       pid_string: pids[_pid],
+      type: 4,
       value: value,
     });
   }
