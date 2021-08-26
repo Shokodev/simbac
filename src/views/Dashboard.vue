@@ -1,22 +1,17 @@
 <template>
   <v-container>
-    <h1 class="ma-2">Dashboard</h1>
-    <v-card class="ma-2 secondary">
-      <v-card-title>
-        Console
-      </v-card-title>
-      <div class="ma-2 rounded-lg">
-        <div class="text-left" v-for="(txt,i) in GET_CONSOLE_MSG" :key="i">{{txt.timestamp}} {{txt.level.toUpperCase()}} {{txt.message}}</div>
-      </div>
-    </v-card>
+    <h1 class="ma-2">SIMBAC</h1>
+      <console-table></console-table>
   </v-container>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import consoleTable  from "@/views/Table"
   export default {
     name: 'Dashboard',
     components: {
+      consoleTable
     },
     methods:{
 
