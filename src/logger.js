@@ -34,7 +34,6 @@ const logger = createLogger({
             json: false,
             maxsize: 5242880,
             maxFiles: 1,
-            level: 'warn',
         }),
         new transports.Console(),
         new ConsoleFrontend(),
