@@ -28,6 +28,20 @@
             </v-card-actions>
           </base-card>
         </v-col>
+        <v-col cols="12" md="6">
+          <base-card color="primary" full-header>
+            <template  #heading>
+              <div class="pa-8 white--text">
+                <div class="text-h4 font-weight-light">
+                  Device
+                </div>
+                <div class="text-caption">
+                  BACI
+                </div>
+              </div>
+            </template>
+          </base-card>
+        </v-col>
       </v-row>
 
       <base-card color="primary" full-header>
