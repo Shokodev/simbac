@@ -40,6 +40,9 @@
                 </div>
               </div>
             </template>
+            <v-card-text>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam possimus voluptatum, tempore voluptatem accusantium libero! Soluta eum quas voluptas, quasi quis minus odit tempora vitae perspiciatis ullam illum nostrum ipsam.
+            </v-card-text>
           </base-card>
         </v-col>
       </v-row>
