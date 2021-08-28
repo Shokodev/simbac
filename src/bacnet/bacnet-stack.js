@@ -54,7 +54,7 @@ function createStack() {
     let object = read("dp").find(
       (datapoint) =>
         datapoint.oid ===
-        `${data.request.objectId.type}${data.request.objectId.instance}`
+        `${data.request.objectId.type}:${data.request.objectId.instance}`
     );
     if (!object) {
       log.debug(`Object ${obj.type} (${obj.inst}) not found, return Error`);

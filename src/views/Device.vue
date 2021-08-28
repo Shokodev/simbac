@@ -1,59 +1,73 @@
 <template>
   <div>
-  <v-container>
-    <base-card v-if="device" color="primary" full-header>
-      <template #heading>
-        <div class="pa-8 white--text">
-          <div class="text-h4 font-weight-light">
-            BACnet Device
-          </div>
-          <div class="text-caption">
-            {{ device.name }}
-          </div>
-        </div>
-      </template>
-      <v-card-text>
-        <div>Port: {{ device.port }}</div>
-        <div>Device ID: {{ device.deviceId }}</div>
-      </v-card-text>
+    <v-container fluid>
+      <v-row>
+        <v-col cols="12" md="6">
+          <base-card v-if="device" color="primary" full-header>
+            <template #heading>
+              <div class="pa-8 white--text">
+                <div class="text-h4 font-weight-light">
+                  BACnet Device
+                </div>
+                <div class="text-caption">
+                  {{ device.name }}
+                </div>
+              </div>
+            </template>
+            <v-card-text>
+              <div>Port: {{ device.port }}</div>
+              <div>Device ID: {{ device.deviceId }}</div>
+            </v-card-text>
             <v-card-actions>
-        <v-btn @click="start" :color="running ? 'green' : ''">Run</v-btn>
-        <v-btn @click="stop" :color="!running ? 'red' : ''">Stop</v-btn>
-        <v-spacer></v-spacer>
-        <v-btn @click="deviceSettings = true" v-if="!running"
-          >Device Settings</v-btn
-        >
-      </v-card-actions>
-    </base-card>
+              <v-btn @click="start" :color="running ? 'green' : ''">Run</v-btn>
+              <v-btn @click="stop" :color="!running ? 'red' : ''">Stop</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn @click="deviceSettings = true" v-if="!running"
+                >Device Settings</v-btn
+              >
+            </v-card-actions>
+          </base-card>
+        </v-col>
+      </v-row>
 
-    <base-alert-box
-      v-if="alert"
-      :showDialog="alert"
-      :text="errorText"
-      type="error"
-      @confirm="alertEvent($event)"
-    />
-    <DeviceSettings
-      v-if="deviceSettings"
-      :showDialog="deviceSettings"
-      :device="device"
-      @save="deviceSettingsEvent($event)"
-    />
-  </v-container>
-    <datapoint-tree />
+      <base-card color="primary" full-header>
+        <template #heading>
+          <div class="pa-8 white--text">
+            <div class="text-h4 font-weight-light">
+              Datapoints
+            </div>
+          </div>
+        </template>
+        <datapoint-tree />
+      </base-card>
+
+      <base-alert-box
+        v-if="alert"
+        :showDialog="alert"
+        :text="errorText"
+        type="error"
+        @confirm="alertEvent($event)"
+      />
+      <DeviceSettings
+        v-if="deviceSettings"
+        :showDialog="deviceSettings"
+        :device="device"
+        @save="deviceSettingsEvent($event)"
+      />
+    </v-container>
   </div>
 </template>
 
 <script>
 import DeviceSettings from "@/components/DeviceSettings.vue";
 import { mapActions, mapGetters } from "vuex";
-import DatapointTree from '@/components/DatapointTree.vue';
+import DatapointTree from "@/components/DatapointTree.vue";
 
 export default {
   name: "Device",
   components: {
     DeviceSettings,
-    DatapointTree
+    DatapointTree,
   },
   data: () => ({
     alert: false,
