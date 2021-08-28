@@ -40,6 +40,9 @@ export default new Vuex.Store({
     },
     GET_CONSOLE_MSG: (state) => {
       return state.consoleMsg;
-    }
+    },
+    GET_DEVICE: (state) => {
+      return state.device;
+    },
   }
 })

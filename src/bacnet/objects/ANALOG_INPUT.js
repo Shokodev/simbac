@@ -3,7 +3,7 @@ const BacnetObject = require("../bacnet-object");
 
 class AnalogInput extends BacnetObject {
   constructor(_instance = Number, storeProps = []) {
-    super(bacnet.enum.ObjectType.ANALOG_VALUE, _instance, storeProps);
+    super(bacnet.enum.ObjectType.ANALOG_INPUT, _instance, storeProps);
     if (storeProps.length === 0) {
       props.forEach((prop) => {
         this.properties.push(prop);

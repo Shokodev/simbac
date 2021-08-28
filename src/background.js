@@ -63,6 +63,7 @@ app.whenReady().then(async () => {
 
 const BACnetDevice = require("./bacnet/bacnet-device");
 const device = new BACnetDevice();
+const bacnet = require("bacstack").enum;
 
 ipcMain.on("GET_DEVICE", (event) => {
   event.reply("GET_DEVICE", {
@@ -72,6 +73,7 @@ ipcMain.on("GET_DEVICE", (event) => {
     vendorId: read("vendorId"),
     dp: read("dp"),
     isRunning: device.bacstack ? true : false,
+    objectTypes: bacnet.ObjectType,
   });
 });
 
@@ -88,7 +90,7 @@ ipcMain.on("CREATE_DEVICE", (event, payload) => {
     // Read Device Object
     device.bacstack.readProperty(
       "localhost",
-      { type: 2, instance: 0 },
+      { type: 0, instance: 0 },
       85,
       (err, data) => {
         if (err) {

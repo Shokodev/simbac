@@ -1,4 +1,5 @@
 <template>
+  <div>
   <v-container>
     <base-card v-if="device" color="primary" full-header>
       <template #heading>
@@ -25,8 +26,6 @@
       </v-card-actions>
     </base-card>
 
-      
-
     <base-alert-box
       v-if="alert"
       :showDialog="alert"
@@ -41,16 +40,20 @@
       @save="deviceSettingsEvent($event)"
     />
   </v-container>
+    <datapoint-tree />
+  </div>
 </template>
 
 <script>
 import DeviceSettings from "@/components/DeviceSettings.vue";
 import { mapActions, mapGetters } from "vuex";
+import DatapointTree from '@/components/DatapointTree.vue';
 
 export default {
   name: "Device",
   components: {
     DeviceSettings,
+    DatapointTree
   },
   data: () => ({
     alert: false,

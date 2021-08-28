@@ -22,7 +22,7 @@ class BacnetObject {
     if (!Number.isInteger(_instance))
       throw TypeError("BACNetObject Inctance number");
     if (!object_types[_type]) throw TypeError("BACNetObject Type");
-    this.oid = `${_type}${_instance}`;
+    this.oid = `${_type}:${_instance}`;
     if (storeProps.length > 0) {
       this.properties = storeProps;
     } else {
