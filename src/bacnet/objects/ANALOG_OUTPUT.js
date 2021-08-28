@@ -1,9 +1,9 @@
 const bacnet = require("bacstack");
 const BacnetObject = require("../bacnet-object");
 
-class AnalogInput extends BacnetObject {
+class AnalogOutput extends BacnetObject {
   constructor(_instance = Number, storeProps = []) {
-    super(bacnet.enum.ObjectType.ANALOG_INPUT, _instance, storeProps);
+    super(bacnet.enum.ObjectType.ANALOG_OUTPUT, _instance, storeProps);
     if (storeProps.length === 0) {
       props.forEach((prop) => {
         this.properties.push(prop);
@@ -58,12 +58,6 @@ const props = [
     value: 0,
   },
   {
-    id: bacnet.enum.PropertyIdentifier.UPDATE_INTERVAL,
-    pidName: "UPDATE_INTERVAL",
-    type: bacnet.enum.ApplicationTags.UNSIGNED_INTEGER,
-    value: 0,
-  },
-  {
     id: bacnet.enum.PropertyIdentifier.UNITS,
     pidName: "UNITS",
     type: bacnet.enum.ApplicationTags.ENUMERATED,
@@ -86,6 +80,18 @@ const props = [
     pidName: "RESOLUTION",
     type: bacnet.enum.ApplicationTags.REAL,
     value: 1,
+  },
+  {
+    id: bacnet.enum.PropertyIdentifier.PRIORITY_ARRAY,
+    pidName: "PRIORITY_ARRAY",
+    type: bacnet.enum.ApplicationTags.ENUMERATED,
+    value: 0,
+  },
+  {
+    id: bacnet.enum.PropertyIdentifier.RELINQUISH_DEFAULT,
+    pidName: "RELINQUISH_DEFAULT",
+    type: bacnet.enum.ApplicationTags.REAL,
+    value: 0,
   },
   {
     id: bacnet.enum.PropertyIdentifier.COV_INCREMENT,
@@ -161,4 +167,4 @@ const props = [
   },
 ];
 
-module.exports = AnalogInput;
+module.exports = AnalogOutput;
