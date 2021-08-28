@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <h1 class="ma-2">SIMBAC</h1>
       <console-table></console-table>
   </v-container>
 </template>

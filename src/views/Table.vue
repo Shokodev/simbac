@@ -1,19 +1,42 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <base-card>
+      <base-card color="primary" full-header>
+        <template #heading>
+          <div class="pa-8 white--text">
+            <div class="text-h4 font-weight-light">
+              Console
+            </div>
+            <div class="text-caption">
+              BACnet console 
+            </div>
+          </div>
+        </template>
         <v-card-title>
           <div class="d-flex justifiy-space-between flex-wrap">
-            <v-checkbox v-model="level" value="error" label="Error" color="red">
+            <v-checkbox
+              v-model="level"
+              value="error"
+              label="Error"
+              color="red"
+              class="mr-2"
+            >
             </v-checkbox>
             <v-checkbox
               v-model="level"
               value="warn"
               label="Warning"
               color="orange lighten-2"
+              class="mr-2"
             >
             </v-checkbox>
-            <v-checkbox v-model="level" value="info" label="Info" color="info">
+            <v-checkbox
+              v-model="level"
+              value="info"
+              label="Info"
+              color="info"
+              class="mr-2"
+            >
             </v-checkbox>
             <v-checkbox
               v-model="level"
@@ -23,11 +46,8 @@
             >
             </v-checkbox>
           </div>
-        </v-card-title>
-        <v-card-title>
-          Console
+          <v-spacer></v-spacer> <v-spacer></v-spacer> <v-spacer></v-spacer>
           <v-spacer></v-spacer>
-
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
@@ -50,7 +70,13 @@
           fixed-header
         >
           <template v-slot:item.level="{ item }">
-            <v-chip width="50px" outlined :color="getColor(item.level)" dark>
+            <v-chip
+              width="50px"
+              class="ma-1"
+              outlined
+              small
+              :color="getColor(item.level)"
+            >
               {{ item.level }}
             </v-chip>
           </template>
