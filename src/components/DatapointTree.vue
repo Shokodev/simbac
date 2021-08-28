@@ -1,5 +1,5 @@
 <template>
-    <v-treeview dense :items="datapoints"></v-treeview>
+  <v-treeview dense :items="datapoints"></v-treeview>
 </template>
 
 <script>
@@ -11,6 +11,7 @@ export default {
     datapoints: function() {
       let result = [];
       let types = this.GET_DEVICE.objectTypes;
+      if (this.GET_DEVICE.length === 0) return null;
       Object.keys(types).forEach((key, i) => {
         let dps = this.GET_DEVICE.dp.filter(
           (dp) => dp.oid.split(":")[0] == types[key]

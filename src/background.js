@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const { save, read } = require("./background-store");
 import path from "path";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+import { object_types } from "./bacnet/utils/type-helper";
 const isDevelopment = process.env.NODE_ENV !== "production";
 const log = require("./logger");
 
@@ -80,7 +81,6 @@ ipcMain.on("GET_DEVICE", (event) => {
 ipcMain.on("CREATE_DEVICE", (event, payload) => {
   try {
     log.info("Save device settings");
-
     save("name", payload.name);
     save("port", parseInt(payload.port));
     save("deviceId", parseInt(payload.deviceId));
@@ -113,6 +113,25 @@ ipcMain.on("UPDATE_DPS", (event, payload) => {
     event.reply("UPDATE_DPS", "OK");
   } catch (err) {
     event.reply("UPDATE_DPS", err);
+  }
+});
+
+ipcMain.on("NEW_DP", (event, payload) => {
+  try {
+    log.info(`Create new: ${payload}`);
+    let obj = require(`./bacnet/objects/${payload}`);
+    let instance = read("dp").reduce((a, v) => {
+      if (object_types[v.oid.split(":")[0]] === payload) {
+        if (parseInt(v.oid.split(":")[1]) > a) {
+          return parseInt(v.oid.split(":")[1]);
+        } else return a;
+      }
+      return a;
+    }, 0);
+    log.debug(`Allocate instance number ${instance++}`);
+    event.reply("NEW_DP", new obj(instance++));
+  } catch (err) {
+    event.reply("NEW_DP", err);
   }
 });
 

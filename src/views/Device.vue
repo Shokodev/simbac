@@ -30,7 +30,7 @@
         </v-col>
         <v-col cols="12" md="6">
           <base-card color="primary" full-header>
-            <template  #heading>
+            <template #heading>
               <div class="pa-8 white--text">
                 <div class="text-h4 font-weight-light">
                   BACnet Device / Interface
@@ -41,7 +41,10 @@
               </div>
             </template>
             <v-card-text>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam possimus voluptatum, tempore voluptatem accusantium libero! Soluta eum quas voluptas, quasi quis minus odit tempora vitae perspiciatis ullam illum nostrum ipsam.
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam
+              possimus voluptatum, tempore voluptatem accusantium libero! Soluta
+              eum quas voluptas, quasi quis minus odit tempora vitae
+              perspiciatis ullam illum nostrum ipsam.
             </v-card-text>
           </base-card>
         </v-col>
@@ -56,6 +59,7 @@
           </div>
         </template>
         <datapoint-tree />
+        <v-btn @click="createDp">create</v-btn>
       </base-card>
 
       <base-alert-box
@@ -112,6 +116,16 @@ export default {
         this.SET_IS_RUNNING(false);
       }
     });
+    window.ipc.on("NEW_DP", (e) => {
+      //OPEN DIALOG
+      console.log(e);
+      this.$store.state.device.dp.push(e);
+      window.ipc.send("UPDATE_DPS", this.$store.state.device.dp);
+    });
+    window.ipc.on("UPDATE_DPS", (e) => {
+      console.log(e);
+      this.READ_ESTORE();
+    });
     this.READ_ESTORE();
     this.device = this.$store.state.device;
   },
@@ -129,6 +143,9 @@ export default {
     deviceSettingsEvent(d) {
       this.deviceSettings = false;
       if (d) this.device = d;
+    },
+    createDp() {
+      window.ipc.send("NEW_DP", "ANALOG_INPUT");
     },
     ...mapActions(["READ_ESTORE", "SET_IS_RUNNING"]),
   },

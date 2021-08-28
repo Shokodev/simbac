@@ -5,7 +5,8 @@ const validChannels = [
   "DELETE_DEVICE", 
   "GET_DEVICE",
   "UPDATE_DPS",
-  "CONSOLE_MSG"
+  "CONSOLE_MSG",
+  "NEW_DP"
 ];
 
 console.log("Preload...");
