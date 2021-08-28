@@ -14,7 +14,7 @@ export default new Vuetify({
         success: colors.green,
         danger: colors.red,
         warning: colors.deepOrange,
-        info: colors.indigo,
+        info: colors.white,
 
         dark: "#242939",
 
@@ -26,7 +26,7 @@ export default new Vuetify({
         success: colors.green,
         danger: colors.red,
         warning: colors.deepOrange,
-        info: colors.indigo
+        info: colors.white
       }
     }
   },

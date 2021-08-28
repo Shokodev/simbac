@@ -7,7 +7,7 @@
             <template #heading>
               <div class="pa-8 white--text">
                 <div class="text-h4 font-weight-light">
-                  BACnet Device
+                  BACnet STACK
                 </div>
                 <div class="text-caption">
                   {{ device.name }}
@@ -23,7 +23,7 @@
               <v-btn @click="stop" :color="!running ? 'red' : ''">Stop</v-btn>
               <v-spacer></v-spacer>
               <v-btn @click="deviceSettings = true" v-if="!running"
-                >Device Settings</v-btn
+                >Settings</v-btn
               >
             </v-card-actions>
           </base-card>
@@ -33,7 +33,7 @@
             <template  #heading>
               <div class="pa-8 white--text">
                 <div class="text-h4 font-weight-light">
-                  Device
+                  BACnet Device / Interface
                 </div>
                 <div class="text-caption">
                   BACI
