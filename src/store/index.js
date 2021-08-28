@@ -7,7 +7,12 @@ export default new Vuex.Store({
   state: {
     device:{},
     isRunning: false,
-    consoleMsg: []
+    consoleMsg: [],
+    style: {
+      sidebarMini: false,
+      sidebarDrawer: true,
+      dark: 'true'
+    }
   },
   mutations: {
     setStore(state,device){
@@ -18,6 +23,12 @@ export default new Vuex.Store({
     },
     setConsoleMsg(state,payload){
       state.consoleMsg.push(payload);
+    },
+    setStyleMini(state) {
+      state.style.sidebarMini = !state.style.sidebarMini
+    },
+    setStyleDrawer(state) {
+      state.style.sidebarDrawer = !state.style.sidebarDrawer
     }
   },
   actions: {
@@ -32,6 +43,12 @@ export default new Vuex.Store({
     },
     CONSOLE_MSG({commit}, payload){
       commit('setConsoleMsg',payload)
+    },
+    SET_STYLE_MINI({commit}) {
+      commit('setStyleMini')
+    },
+    SET_STYLE_DRAWER({commit}) {
+      commit('setStyleDrawer')
     }
   },
   getters: {
@@ -40,6 +57,9 @@ export default new Vuex.Store({
     },
     GET_CONSOLE_MSG: (state) => {
       return state.consoleMsg;
-    }
+    },
+    GET_STYLE: (state) => {
+      return state.style;
+    },
   }
 })
