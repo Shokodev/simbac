@@ -1,5 +1,6 @@
 const bacnet = require("bacstack");
-const BacnetObject = require("./bacnet-object");
+const { object_types, pids } = require("./utils/type-helper");
+const AnalogInput = require("./objects/ANALOG_INPUT");
 const log = require("../logger");
 const { read, save } = require("../background-store");
 const addDp = (bacnetObject) => {
@@ -15,9 +16,8 @@ function createStack() {
     port: read("port"),
   });
 
-  // create sample data
-  let ex1 = new BacnetObject(2, 0); //ANALOG_VALUE
-  ex1.setProperty(85, 14.434); //PRESENT_VALUE
+  // create sample datapoint
+  let ex1 = new AnalogInput(0);
   try {
     addDp(ex1);
   } catch (err) {
@@ -37,56 +37,60 @@ function createStack() {
 
   //TODO DEFINE ERROR RESPONSE
   bacstack.on("readProperty", (data) => {
-    log.info(`Read property [${data.request.property.id}] request from: ${data.address}`);
+    let prop = {
+      id: data.request.property.id,
+      str: pids[data.request.property.id],
+    };
+    let obj = {
+      inst: data.request.objectId.instance,
+      type: object_types[data.request.objectId.type],
+    };
+    log.info(
+      `Read property ${prop.str} (${prop.id}) request on ${obj.type} (${obj.inst}) from ${data.address}`
+    );
     let object = read("dp").find(
       (datapoint) =>
         datapoint.oid ===
         `${data.request.objectId.type}${data.request.objectId.instance}`
     );
-    if (!object)
+    if (!object) {
+      log.debug(`Object ${obj.type} (${obj.inst}) not found, return Error`);
       return bacstack.errorResponse(
         data.address,
         bacnet.enum.ConfirmedServiceChoice.READ_PROPERTY,
         data.invokeId,
         0,
         0
-      );
-
-    const property = object.properties.filter(property=>property.id == data.request.property.id)
-    if (!property)
-      return bacstack.errorResponse(
-        data.address,
-        bacnet.enum.ConfirmedServiceChoice.READ_PROPERTY,
-        data.invokeId,
-        0,
-        0
-      );
-    if (data.request.property.index === 0xffffffff) {
-      bacstack.readPropertyResponse(
-        data.address,
-        data.invokeId,
-        data.request.objectId,
-        data.request.property,
-        property
-      );
-    } else {
-      const slot = property[data.request.property.index];
-      if (!slot)
-        return bacstack.errorResponse(
-          data.address,
-          bacnet.enum.ConfirmedServiceChoice.READ_PROPERTY,
-          data.invokeId,
-          0,
-          0
-        );
-      bacstack.readPropertyResponse(
-        data.address,
-        data.invokeId,
-        data.request.objectId,
-        data.request.property,
-        slot
       );
     }
+    const property = object.properties.filter(
+      (property) => property.id == data.request.property.id
+    );
+    if (!property) {
+      log.debug(
+        `Property ${prop.str} (${prop.id}) on object ${obj.type} (${obj.inst}) not found, return Error`
+      );
+      return bacstack.errorResponse(
+        data.address,
+        bacnet.enum.ConfirmedServiceChoice.READ_PROPERTY,
+        data.invokeId,
+        0,
+        0
+      );
+    }
+    log.debug(
+      `Return ${prop.str} with: ${property.reduce(
+        (a, v) => a + ` ${v.value}`,
+        ""
+      )}`
+    );
+    bacstack.readPropertyResponse(
+      data.address,
+      data.invokeId,
+      data.request.objectId,
+      data.request.property,
+      property
+    );
   });
 
   bacstack.on("writeProperty", (data) => {

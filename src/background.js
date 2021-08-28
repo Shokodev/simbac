@@ -91,7 +91,11 @@ ipcMain.on("CREATE_DEVICE", (event, payload) => {
       { type: 2, instance: 0 },
       85,
       (err, data) => {
-      log.info(`Found value: ${data.values[0].value}`);
+        if (err) {
+          log.error(`Read property request failed: ${err}`);
+        } else {
+          log.info(`Found value: ${data.values[0].value}`);
+        }
       }
     );
     event.reply("CREATE_DEVICE", result);
@@ -115,5 +119,3 @@ ipcMain.on("DELETE_DEVICE", (event, payload) => {
   let result = device.stop();
   event.reply("DELETE_DEVICE", result);
 });
-
-
