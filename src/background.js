@@ -60,12 +60,14 @@ app.whenReady().then(async () => {
     }
   }
   createWindow();
+  console.log(read('netInterface')); 
 });
 
 const BACnetDevice = require("./bacnet/bacnet-device");
 const device = new BACnetDevice();
 const bacnet = require("bacstack").enum;
 
+const os = require('os');
 ipcMain.on("GET_DEVICE", (event) => {
   event.reply("GET_DEVICE", {
     name: read("name"),
@@ -75,6 +77,7 @@ ipcMain.on("GET_DEVICE", (event) => {
     dp: read("dp"),
     isRunning: device.bacstack ? true : false,
     objectTypes: bacnet.ObjectType,
+    netInterfaces: os.networkInterfaces(),
   });
 });
 

@@ -17,6 +17,10 @@ const device = {
     type: "number",
     default: 7,
   },
+  netInterface:{
+    type:"string",
+    default:"127.0.0.1"
+  },
   dp: { type: "array", default: [] },
 };
 

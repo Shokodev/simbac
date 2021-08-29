@@ -13,8 +13,16 @@ const addDp = (bacnetObject) => {
 };
 
 function createStack() {
+
+  /* {
+  port: 47809,                          // Use BAC1 as communication port
+  interface: '192.168.251.10',          // Listen on a specific interface
+  broadcastAddress: '192.168.251.255',  // Use the subnet broadcast address
+  adpuTimeout: 6000                     // Wait twice as long for response
+  } */
   const bacstack = new bacnet({
     port: read("port"),
+    interface: read("netInterface")
   });
 
   // create sample datapoint
