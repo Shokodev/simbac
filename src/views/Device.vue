@@ -59,7 +59,7 @@
           </div>
         </template>
         <datapoint-tree />
-        <v-btn @click="createDp">create</v-btn>
+        <v-btn @click="addDatapoint = true">Add Dp</v-btn>
       </base-card>
 
       <base-alert-box
@@ -75,6 +75,11 @@
         :device="device"
         @save="deviceSettingsEvent($event)"
       />
+      <add-datapoint
+        v-if="addDatapoint"
+        :showDialog="addDatapoint"
+        @close="addDatapoint = false"
+      />
     </v-container>
   </div>
 </template>
@@ -83,18 +88,21 @@
 import DeviceSettings from "@/components/DeviceSettings.vue";
 import { mapActions, mapGetters } from "vuex";
 import DatapointTree from "@/components/DatapointTree.vue";
+import AddDatapoint from "../components/AddDatapoint.vue";
 
 export default {
   name: "Device",
   components: {
     DeviceSettings,
     DatapointTree,
+    AddDatapoint,
   },
   data: () => ({
     alert: false,
     errorText: "",
     device: null,
     deviceSettings: false,
+    addDatapoint: false,
     bacnetStackRunning: { state: true, color: "green" },
     bacnetStackStopped: { state: false, color: "red" },
   }),
@@ -116,16 +124,6 @@ export default {
         this.SET_IS_RUNNING(false);
       }
     });
-    window.ipc.on("NEW_DP", (e) => {
-      //OPEN DIALOG
-      console.log(e);
-      this.$store.state.device.dp.push(e);
-      window.ipc.send("UPDATE_DPS", this.$store.state.device.dp);
-    });
-    window.ipc.on("UPDATE_DPS", (e) => {
-      console.log(e);
-      this.READ_ESTORE();
-    });
     this.READ_ESTORE();
     this.device = this.$store.state.device;
   },
@@ -144,16 +142,12 @@ export default {
       this.deviceSettings = false;
       if (d) this.device = d;
     },
-    createDp() {
-      window.ipc.send("NEW_DP", "ANALOG_INPUT");
-    },
     ...mapActions(["READ_ESTORE", "SET_IS_RUNNING"]),
   },
   computed: {
     running: function() {
       return this.GET_IS_RUNNING;
     },
-
     ...mapGetters(["GET_IS_RUNNING"]),
   },
 };
