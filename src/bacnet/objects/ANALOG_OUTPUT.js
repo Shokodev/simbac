@@ -37,6 +37,7 @@ const props = [
     id: bacnet.enum.PropertyIdentifier.STATUS_FLAGS,
     pidName: "STATUS_FLAGS",
     type: bacnet.enum.ApplicationTags.ENUMERATED,
+    enum: bacnet.enum.StatusFlags,
     value: 3,
   },
   {

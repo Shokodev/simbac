@@ -4,7 +4,7 @@
       <v-card-title class="headline">Add Datapoint</v-card-title>
       <v-select
         v-model="objectType"
-        :items="Object.keys(GET_DEVICE.objectTypes)"
+        :items="Object.keys(GET_ESTORE.objectTypes)"
         @change="changeType"
         label="Choose Object Type"
         required
@@ -49,7 +49,7 @@ export default {
       console.log(defaultDp);
       this.dp = defaultDp;
     });
-    window.ipc.on("UPDATE_DPS", (e) => {
+    window.ipc.on("ADD_DP", (e) => {
       console.log(e);
       this.READ_ESTORE();
       this.$emit("close");
@@ -58,19 +58,19 @@ export default {
   methods: {
     save() {
       if (this.dp.oid) {
-        this.$store.state.device.dp.push(this.dp);
-        window.ipc.send("UPDATE_DPS", this.$store.state.device.dp);
+        window.ipc.send("ADD_DP", this.dp);
       } else {
         this.$emit("close");
       }
     },
     changeType() {
+      this.dp = {};
       window.ipc.send("NEW_DP", this.objectType);
     },
     ...mapActions(["READ_ESTORE"]),
   },
   computed: {
-    ...mapGetters(["GET_DEVICE"]),
+    ...mapGetters(["GET_ESTORE"]),
   },
 };
 </script>

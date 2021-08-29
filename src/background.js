@@ -1,5 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
-const { save, read } = require("./background-store");
+const { save, read, addDp, removeDp } = require("./background-store");
 import path from "path";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import { object_types } from "./bacnet/utils/type-helper";
@@ -68,16 +68,16 @@ const device = new BACnetDevice();
 const bacnet = require("bacstack").enum;
 
 const os = require('os');
-ipcMain.on("GET_DEVICE", (event) => {
-  event.reply("GET_DEVICE", {
+ipcMain.on("GET_STORE", (event) => {
+  event.reply("GET_STORE", {
     name: read("name"),
     port: read("port"),
     deviceId: read("deviceId"),
     vendorId: read("vendorId"),
-    dp: read("dp"),
     isRunning: device.bacstack ? true : false,
     objectTypes: bacnet.ObjectType,
     netInterfaces: os.networkInterfaces(),
+    dp: read("dp"),
   });
 });
 
@@ -109,13 +109,23 @@ ipcMain.on("CREATE_DEVICE", (event, payload) => {
   }
 });
 
-ipcMain.on("UPDATE_DPS", (event, payload) => {
+ipcMain.on("ADD_DP", (event, payload) => {
   try {
-    log.info("Update datapoints");
-    save("dp", payload);
-    event.reply("UPDATE_DPS", "OK");
+    log.info(`Add datapoint: ${payload.oid}`);
+    addDp(payload);
+    event.reply("ADD_DP", "OK");
   } catch (err) {
-    event.reply("UPDATE_DPS", err);
+    event.reply("ADD_DP", err);
+  }
+});
+
+ipcMain.on("REMOVE_DP", (event, payload) => {
+  try {
+    log.info(`Remove datapoint: ${payload.oid}`);
+    removeDp(payload);
+    event.reply("REMOVE_DP", "OK");
+  } catch (err) {
+    event.reply("REMOVE_DP", err);
   }
 });
 
@@ -131,8 +141,9 @@ ipcMain.on("NEW_DP", (event, payload) => {
       }
       return a;
     }, 0);
-    log.debug(`Allocate instance number ${instance++}`);
-    event.reply("NEW_DP", new obj(instance++));
+    let num = instance + 1;
+    log.debug(`Allocate instance number ${num}`);
+    event.reply("NEW_DP", new obj(num));
   } catch (err) {
     event.reply("NEW_DP", err);
   }

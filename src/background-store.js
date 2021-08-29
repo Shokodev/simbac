@@ -1,6 +1,6 @@
 const Store = require("electron-store");
 
-const device = {
+const eStore = {
   name: {
     type: "string",
     default: "device1",
@@ -27,6 +27,25 @@ const device = {
 const save = (propName, payload) => store.set(propName, payload);
 const read = (propName) => store.get(propName);
 
-const store = new Store({ schema: device });
+const store = new Store({ schema: eStore });
 
-module.exports = { save, read };
+
+const addDp = (bacnetObject) => {
+  let dps = store.get('dp');
+  if (dps.find((dp) => dp.oid === bacnetObject.oid))
+    throw Error(`Store has already datapoint with oid: ${bacnetObject.oid}`);
+    dps.push(bacnetObject);
+    store.set('dp',dps);
+};
+
+//NOT TESTED
+const removeDp = (bacnetObject) => {
+  let dps = store.get('dp');
+  if (dps.find((dp) => dp.oid === bacnetObject.oid))
+    throw Error(`Store no datapoint with oid: ${bacnetObject.oid}`);
+    dps.slice(dps.indexOf(bacnetObject),1);
+    store.set('dp',dps);
+};
+
+
+module.exports = { save, read, addDp, removeDp };

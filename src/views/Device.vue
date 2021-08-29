@@ -3,20 +3,20 @@
     <v-container fluid>
       <v-row>
         <v-col cols="12" md="6">
-          <base-card v-if="device" color="primary" full-header>
+          <base-card v-if="eStore" color="primary" full-header>
             <template #heading>
               <div class="pa-8 white--text">
                 <div class="text-h4 font-weight-light">
                   BACnet STACK
                 </div>
                 <div class="text-caption">
-                  {{ device.name }}
+                  {{ eStore.name }}
                 </div>
               </div>
             </template>
             <v-card-text>
-              <div>Port: {{ device.port }}</div>
-              <div>Device ID: {{ device.deviceId }}</div>
+              <div>Port: {{ eStore.port }}</div>
+              <div>Device ID: {{ eStore.deviceId }}</div>
             </v-card-text>
             <v-card-actions>
               <v-btn @click="start" :color="running ? 'green' : ''">Run</v-btn>
@@ -69,10 +69,10 @@
         type="error"
         @confirm="alertEvent($event)"
       />
-      <DeviceSettings
+      <device-settings
         v-if="deviceSettings"
         :showDialog="deviceSettings"
-        :device="device"
+        :device="eStore"
         @save="deviceSettingsEvent($event)"
       />
       <add-datapoint
@@ -100,7 +100,7 @@ export default {
   data: () => ({
     alert: false,
     errorText: "",
-    device: null,
+    eStore: null,
     deviceSettings: false,
     addDatapoint: false,
     bacnetStackRunning: { state: true, color: "green" },
@@ -125,11 +125,11 @@ export default {
       }
     });
     this.READ_ESTORE();
-    this.device = this.$store.state.device;
+    this.eStore = this.GET_ESTORE;
   },
   methods: {
     start() {
-      window.ipc.send("CREATE_DEVICE", this.device);
+      window.ipc.send("CREATE_DEVICE", this.GET_ESTORE);
     },
     stop() {
       window.ipc.send("DELETE_DEVICE", "STOP");
@@ -138,17 +138,17 @@ export default {
       this.alert = false;
       this.errorText = "";
     },
-    deviceSettingsEvent(d) {
+    deviceSettingsEvent(eStore) {
       this.deviceSettings = false;
-      if (d) this.device = d;
+      this.SET_ESTORE(eStore);
     },
-    ...mapActions(["READ_ESTORE", "SET_IS_RUNNING"]),
+    ...mapActions(["READ_ESTORE", "SET_IS_RUNNING", "SET_ESTORE"]),
   },
   computed: {
     running: function() {
       return this.GET_IS_RUNNING;
     },
-    ...mapGetters(["GET_IS_RUNNING"]),
+    ...mapGetters(["GET_IS_RUNNING", "GET_ESTORE"]),
   },
 };
 </script>

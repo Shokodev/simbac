@@ -10,10 +10,10 @@ export default {
   computed: {
     datapoints: function() {
       let result = [];
-      let types = this.GET_DEVICE.objectTypes;
-      if (this.GET_DEVICE.length === 0) return null;
+      let types = this.GET_ESTORE.objectTypes;
+      if (this.GET_ESTORE.length === 0) return null;
       Object.keys(types).forEach((key, i) => {
-        let dps = this.GET_DEVICE.dp.filter(
+        let dps = this.GET_ESTORE.dp.filter(
           (dp) => dp.oid.split(":")[0] == types[key]
         );
         if (dps.length > 0) {
@@ -32,7 +32,7 @@ export default {
       return result;
     },
 
-    ...mapGetters(["GET_DEVICE"]),
+    ...mapGetters(["GET_ESTORE"]),
   },
 };
 </script>

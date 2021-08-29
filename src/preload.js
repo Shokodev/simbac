@@ -1,12 +1,13 @@
 const log = require("./logger");
 const { contextBridge, ipcRenderer } = require("electron");
 const validChannels = [
-  "CREATE_DEVICE", 
-  "DELETE_DEVICE", 
-  "GET_DEVICE",
-  "UPDATE_DPS",
+  "CREATE_DEVICE",
+  "DELETE_DEVICE",
+  "GET_STORE",
+  "ADD_DP",
+  "REMOVE_DP",
   "CONSOLE_MSG",
-  "NEW_DP"
+  "NEW_DP",
 ];
 
 console.log("Preload...");

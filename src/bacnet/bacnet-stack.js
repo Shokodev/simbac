@@ -2,15 +2,9 @@ const bacnet = require("bacstack");
 const { object_types, pids } = require("./utils/type-helper");
 const AnalogInput = require("./objects/ANALOG_INPUT");
 const log = require("../logger");
-const { read, save } = require("../background-store");
+const { read, addDp } = require("../background-store");
 const AnalogOutput = require("./objects/ANALOG_OUTPUT");
-const addDp = (bacnetObject) => {
-  let dps = read("dp");
-  if (dps.find((dp) => dp.oid === bacnetObject.oid))
-    throw Error(`Store has already datapoint with oid: ${bacnetObject.oid}`);
-  dps.push(bacnetObject);
-  save("dp", dps);
-};
+
 
 function createStack() {
 

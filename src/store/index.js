@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    device:{},
+    eStore:{},
     isRunning: false,
     consoleMsg: [],
     style: {
@@ -16,13 +16,16 @@ export default new Vuex.Store({
   },
   mutations: {
     setStore(state,device){
-      state.device = device
+      state.eStore = device
     },
     setIsRunning(state,payload) {
       state.isRunning = payload
     },
     setConsoleMsg(state,payload){
       state.consoleMsg.push(payload);
+    },
+    setEStore(state,payload){
+      state.eStore = payload;
     },
     setStyleMini(state) {
       state.style.sidebarMini = !state.style.sidebarMini
@@ -33,9 +36,9 @@ export default new Vuex.Store({
   },
   actions: {
     READ_ESTORE({commit}){
-      window.ipc.send("GET_DEVICE");
-      window.ipc.on("GET_DEVICE", (device) => {
-        commit('setStore',device)
+      window.ipc.send("GET_STORE");
+      window.ipc.on("GET_STORE", (eStore) => {
+        commit('setEStore',eStore)
       });
     },
     SET_IS_RUNNING({commit}, payload){
@@ -43,6 +46,9 @@ export default new Vuex.Store({
     },
     CONSOLE_MSG({commit}, payload){
       commit('setConsoleMsg',payload)
+    },
+    SET_ESTORE({commit}, payload){
+      commit('setEStore',payload)
     },
     SET_STYLE_MINI({commit}) {
       commit('setStyleMini')
@@ -58,8 +64,8 @@ export default new Vuex.Store({
     GET_CONSOLE_MSG: (state) => {
       return state.consoleMsg;
     },
-    GET_DEVICE: (state) => {
-      return state.device;
+    GET_ESTORE: (state) => {
+      return state.eStore;
     },
     GET_STYLE: (state) => {
       return state.style;

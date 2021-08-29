@@ -3,7 +3,7 @@
     <v-app-bar :dark="$vuetify.theme.dark" app flat>
       <v-app-bar-nav-icon @click="toggleSidebarDrawer"></v-app-bar-nav-icon>
       <v-spacer></v-spacer>
-      <v-icon :color="running.color" v-if="this.$store.state.device">{{
+      <v-icon :color="running.color">{{
         running.icon
       }}</v-icon>
     </v-app-bar>
