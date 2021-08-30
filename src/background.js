@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, globalShortcut } = require("electron");
 const { save, read, addDp, removeDp } = require("./background-store");
 import path from "path";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
@@ -59,6 +59,13 @@ app.whenReady().then(async () => {
       log.error("Vue Devtools failed to install:", e.toString());
     }
   }
+  globalShortcut.register('Alt+CommandOrControl+D', () => {
+    save("name", "device1");
+    save("port", 47808);
+    save("deviceId", 1234);
+    save("vendorId", 7);
+    save("dp", [])  ;
+  })
   createWindow();
   console.log(read('netInterface')); 
 });

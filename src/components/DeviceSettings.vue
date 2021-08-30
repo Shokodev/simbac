@@ -7,7 +7,6 @@
           <v-row>
             <v-col cols="12" sm="6">
               <v-text-field
-                solo-inverted
                 v-model="data.name"
                 label="Device Name"
                 required
@@ -15,25 +14,31 @@
             </v-col>
             <v-col cols="12" sm="6">
               <v-select
+                item-color="info"
                 :items="BACnetPorts"
                 v-model="port"
                 label="BACnet Port"
               >
                 <template v-slot:selection="{ item }">
-                  <div>
-                    <span>{{ item.hex }} {{ item.dez }}</span>
-                  </div>
+                  <v-chip small>
+                    {{ item.hex }}
+                  </v-chip>
+                  <v-spacer></v-spacer>
+                  ({{ item.dez }})
+                  <v-spacer></v-spacer>
                 </template>
                 <template v-slot:item="{ item }">
-                  <div>
-                    <span>{{ item.hex }} {{ item.dez }}</span>
-                  </div>
+                  <v-chip>
+                    {{ item.hex }}
+                  </v-chip>
+                  <v-spacer></v-spacer>
+                  ({{ item.dez }})
+                  <v-spacer></v-spacer>
                 </template>
               </v-select>
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
-                solo-inverted
                 v-model="data.deviceId"
                 label="Device Id"
                 required
@@ -42,7 +47,6 @@
 
             <v-col cols="12" sm="6">
               <v-text-field
-                solo-inverted
                 v-model="data.vendorId"
                 label="Vendor Id"
                 required
@@ -97,7 +101,9 @@ export default {
     };
   },
   mounted() {
-   this.port = this.BACnetPorts.find(element => element.dez === this.device.port)
+    this.port = this.BACnetPorts.find(
+      (element) => element.dez === this.device.port
+    );
   },
   methods: {
     save() {
