@@ -69,7 +69,7 @@
               class="ma-1"
               outlined
               small
-              :color="getColor('.blablabla')"
+              :color="getColor(item.level)"
             >
               {{ item.level }}
             </v-chip>
