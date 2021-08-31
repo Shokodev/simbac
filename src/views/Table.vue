@@ -1,16 +1,9 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <base-card color="primary" full-header>
-        <template #heading>
-          <div class="pa-8 white--text">
-            <div class="text-h4 font-weight-light">
-              Console
-            </div>
-            <div class="text-caption">
-              BACnet console 
-            </div>
-          </div>
+      <base-card color="primary" icon="mdi-application">
+        <template #title>
+          BACnet console
         </template>
         <v-card-title>
           <div class="d-flex justifiy-space-between flex-wrap">
@@ -63,6 +56,7 @@
           :items="console"
           multi-sort
           class="elevation-1"
+          id="consoleTable"
           dense
           disable-pagination
           hide-default-footer
@@ -75,7 +69,7 @@
               class="ma-1"
               outlined
               small
-              :color="getColor(item.level)"
+              :color="getColor('.blablabla')"
             >
               {{ item.level }}
             </v-chip>
@@ -140,4 +134,4 @@ export default {
 // color terminal #28292D
 </script>
 
-<style lang="sass" scoped></style>
+<style lang="sass"></style>

@@ -1,5 +1,10 @@
 <template>
-  <v-treeview dense :items="datapoints"></v-treeview>
+  <v-treeview dense :items="datapoints">
+    <template v-slot:prepend="{ item }">
+      <v-icon v-if="item.children">{{icons[item.name]}}</v-icon>
+      <v-icon v-else>mdi-circle-small</v-icon>
+    </template>
+  </v-treeview>
 </template>
 
 <script>
@@ -7,6 +12,12 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "DatapintTree",
+  data: () => ({
+    icons: {
+      ANALOG_INPUT: "mdi-import",
+      ANALOG_OUTPUT: "mdi-export",
+    },
+  }),
   computed: {
     datapoints: function() {
       let result = [];

@@ -1,16 +1,20 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="600px">
-    <v-card>
-      <v-card-title class="headline">Add Datapoint</v-card-title>
-      <v-select
-        v-model="objectType"
-        :items="Object.keys(GET_ESTORE.objectTypes)"
-        @change="changeType"
-        label="Choose Object Type"
-        required
-      ></v-select>
+    <base-card>
+      <template #title>
+        Add Datapoint
+      </template>
+
       <v-card-text>
-        <v-container> </v-container>
+        <v-container>
+          <v-select
+            v-model="objectType"
+            :items="Object.keys(GET_ESTORE.objectTypes)"
+            @change="changeType"
+            label="Choose Object Type"
+            required
+          ></v-select
+        ></v-container>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -26,7 +30,7 @@
           Cancel
         </v-btn>
       </v-card-actions>
-    </v-card>
+    </base-card>
   </v-dialog>
 </template>
 <script>

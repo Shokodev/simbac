@@ -50,7 +50,7 @@
       </v-list-item>
     </v-list>
     <template v-slot:append>
-      <div class="px-2">
+      <div class="px-2 text-center">
         <v-btn
           v-if="!$vuetify.theme.dark"
           @click="changeDarkMode(true)"
@@ -102,7 +102,7 @@ export default {
     },
     changeDarkMode(data) {
       this.$vuetify.theme.dark = data;
-    }
+    },
   },
 };
 </script>

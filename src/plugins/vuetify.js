@@ -9,7 +9,7 @@ export default new Vuetify({
     default: "dark",
     themes: {
       light: {
-        primary: colors.blue,
+        primary: colors.orange,
         secondary: "#304156",
         success: colors.green,
         danger: colors.red,
@@ -21,7 +21,7 @@ export default new Vuetify({
         background: "#f2f3f8"
       },
       dark: {
-        primary: colors.blue,
+        primary: colors.orange,
         secondary: "#304156",
         success: colors.green,
         danger: colors.red,
