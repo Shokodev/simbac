@@ -1,9 +1,9 @@
 const bacnet = require("bacstack");
 const BacnetObject = require("../bacnet-object");
 
-class AnalogInput extends BacnetObject {
+class BinaryInput extends BacnetObject {
   constructor(_instance = Number, storeProps = []) {
-    super(bacnet.enum.ObjectType.ANALOG_INPUT, _instance, storeProps);
+    super(bacnet.enum.ObjectType.BINARY_INPUT, _instance, storeProps);
     if (storeProps.length === 0) {
       props.forEach((prop) => {
         this.properties.push(prop);
@@ -18,8 +18,9 @@ const props = [
   {
     id: bacnet.enum.PropertyIdentifier.PRESENT_VALUE,
     pidName: "PRESENT_VALUE",
-    type: bacnet.enum.ApplicationTags.REAL,
-    value: 1.1,
+    type: bacnet.enum.ApplicationTags.ENUMERATED,
+    enum: bacnet.enum.BinaryPV,
+    value: 1,
   },
   {
     id: bacnet.enum.PropertyIdentifier.Description,
@@ -61,46 +62,52 @@ const props = [
     value: 0,
   },
   {
-    id: bacnet.enum.PropertyIdentifier.UPDATE_INTERVAL,
-    pidName: "UPDATE_INTERVAL",
-    type: bacnet.enum.ApplicationTags.UNSIGNED_INTEGER,
-    value: 0,
-  },
-  {
-    id: bacnet.enum.PropertyIdentifier.UNITS,
-    pidName: "UNITS",
+    id: bacnet.enum.PropertyIdentifier.POLARITY,
+    pidName: "POLARITY",
     type: bacnet.enum.ApplicationTags.ENUMERATED,
-    enum: bacnet.enum.EngineeringUnits,
+    enum: bacnet.enum.Polarity,
     value: 0,
   },
   {
-    id: bacnet.enum.PropertyIdentifier.MIN_PRES_VALUE,
-    pidName: "MIN_PRES_VALUE",
-    type: bacnet.enum.ApplicationTags.REAL,
-    value: 0,
+    id: bacnet.enum.PropertyIdentifier.INACTIVE_TEXT,
+    pidName: "INACTIVE_TEXT",
+    type: bacnet.enum.ApplicationTags.CHARACTER_STRING,
+    value: "off",
   },
   {
-    id: bacnet.enum.PropertyIdentifier.MAX_PRES_VALUE,
-    pidName: "MAX_PRES_VALUE",
-    type: bacnet.enum.ApplicationTags.REAL,
-    value: 20,
+    id: bacnet.enum.PropertyIdentifier.ACTIVE_TEXT,
+    pidName: "ACTIVE_TEXT",
+    type: bacnet.enum.ApplicationTags.CHARACTER_STRING,
+    value: "on",
   },
   {
-    id: bacnet.enum.PropertyIdentifier.RESOLUTION,
-    pidName: "RESOLUTION",
-    type: bacnet.enum.ApplicationTags.REAL,
-    value: 1,
+    id: bacnet.enum.PropertyIdentifier.CHANGE_OF_STATE_TIME,
+    pidName: "CHANGE_OF_STATE_TIME",
+    type: bacnet.enum.ApplicationTags.DATETIME,
+    value: "",
   },
   {
-    id: bacnet.enum.PropertyIdentifier.COV_INCREMENT,
-    pidName: "COV_INCREMENT",
-    type: bacnet.enum.ApplicationTags.REAL,
-    value: 1,
-  },
-  {
-    id: bacnet.enum.PropertyIdentifier.TIME_DELAY,
-    pidName: "TIME_DELAY",
+    id: bacnet.enum.PropertyIdentifier.CHANGE_OF_STATE_COUNT,
+    pidName: "CHANGE_OF_STATE_COUNT",
     type: bacnet.enum.ApplicationTags.UNSIGNED_INTEGER,
+    value: "",
+  },
+  {
+    id: bacnet.enum.PropertyIdentifier.TIME_OF_STATE_COUNT_RESET,
+    pidName: "TIME_OF_STATE_COUNT_RESET",
+    type: bacnet.enum.ApplicationTags.DATETIME,
+    value: "",
+  },
+  {
+    id: bacnet.enum.PropertyIdentifier.ELAPSED_ACTIVE_TIME,
+    pidName: "ELAPSED_ACTIVE_TIME",
+    type: bacnet.enum.ApplicationTags.UNSIGNED_INTEGER,
+    value: 0,
+  },
+  {
+    id: bacnet.enum.PropertyIdentifier.TIME_OF_ACTIVE_TIME_RESET,
+    pidName: "TIME_OF_ACTIVE_TIME_RESET",
+    type: bacnet.enum.ApplicationTags.DATETIME,
     value: "",
   },
   {
@@ -110,36 +117,18 @@ const props = [
     value: 1,
   },
   {
-    id: bacnet.enum.PropertyIdentifier.HIGH_LIMIT,
-    pidName: "HIGH_LIMIT",
-    type: bacnet.enum.ApplicationTags.REAL,
-    value: 20,
-  },
-  {
-    id: bacnet.enum.PropertyIdentifier.LOW_LIMIT,
-    pidName: "LOW_LIMIT",
-    type: bacnet.enum.ApplicationTags.REAL,
-    value: 0,
-  },
-  {
-    id: bacnet.enum.PropertyIdentifier.DEADBAND,
-    pidName: "DEADBAND",
-    type: bacnet.enum.ApplicationTags.REAL,
-    value: 0,
-  },
-  {
-    id: bacnet.enum.PropertyIdentifier.LIMIT_ENABLED,
-    pidName: "LIMIT_ENABLED",
+    id: bacnet.enum.PropertyIdentifier.ALARM_VALUE,
+    pidName: "ALARM_VALUE",
     type: bacnet.enum.ApplicationTags.ENUMERATED,
-    enum: bacnet.enum.LimitEnable,
-    value: false,
+    enum: bacnet.enum.BinaryPV,
+    value: 1,
   },
   {
     id: bacnet.enum.PropertyIdentifier.EVENT_ENABLED,
     pidName: "EVENT_ENABLED",
     type: bacnet.enum.ApplicationTags.ENUMERATED,
     enum: bacnet.enum.EventTransitionBits,
-    value: 0,
+    value: false,
   },
   {
     id: bacnet.enum.PropertyIdentifier.ACKED_TRANSITIONS,
@@ -159,7 +148,7 @@ const props = [
     id: bacnet.enum.PropertyIdentifier.EVENT_TIME_STAMPS,
     pidName: "EVENT_TIME_STAMPS",
     type: bacnet.enum.ApplicationTags.TIMESTAMP,
-    value: "",
+    value: 0,
   },
   {
     id: bacnet.enum.PropertyIdentifier.PROFILE_NAME,
@@ -169,4 +158,4 @@ const props = [
   },
 ];
 
-module.exports = AnalogInput;
+module.exports = BinaryInput;

@@ -44,12 +44,14 @@ const props = [
     id: bacnet.enum.PropertyIdentifier.EVENT_STATE,
     pidName: "EVENT_STATE",
     type: bacnet.enum.ApplicationTags.ENUMERATED,
+    enum: bacnet.enum.EventState,
     value: 0,
   },
   {
     id: bacnet.enum.PropertyIdentifier.RELIABILITY,
     pidName: "RELIABILITY",
     type: bacnet.enum.ApplicationTags.ENUMERATED,
+    enum: bacnet.enum.Reliability,
     value: 0,
   },
   {
@@ -62,6 +64,7 @@ const props = [
     id: bacnet.enum.PropertyIdentifier.UNITS,
     pidName: "UNITS",
     type: bacnet.enum.ApplicationTags.ENUMERATED,
+    enum: bacnet.enum.EngineeringUnits,
     value: 0,
   },
   {
@@ -86,6 +89,7 @@ const props = [
     id: bacnet.enum.PropertyIdentifier.PRIORITY_ARRAY,
     pidName: "PRIORITY_ARRAY",
     type: bacnet.enum.ApplicationTags.ENUMERATED,
+    enum: {val:"tbd"},
     value: 0,
   },
   {
@@ -134,31 +138,35 @@ const props = [
     id: bacnet.enum.PropertyIdentifier.LIMIT_ENABLED,
     pidName: "LIMIT_ENABLED",
     type: bacnet.enum.ApplicationTags.ENUMERATED,
+    enum: bacnet.enum.LimitEnable,
     value: false,
   },
   {
     id: bacnet.enum.PropertyIdentifier.EVENT_ENABLED,
     pidName: "EVENT_ENABLED",
     type: bacnet.enum.ApplicationTags.ENUMERATED,
+    enum: bacnet.enum.EventTransitionBits,
     value: false,
   },
   {
     id: bacnet.enum.PropertyIdentifier.ACKED_TRANSITIONS,
     pidName: "ACKED_TRANSITIONS",
     type: bacnet.enum.ApplicationTags.ENUMERATED,
+    enum: bacnet.enum.EventTransitionBits,
     value: 0,
   },
   {
     id: bacnet.enum.PropertyIdentifier.NOTIFY_TYPE,
     pidName: "NOTIFY_TYPE",
     type: bacnet.enum.ApplicationTags.ENUMERATED,
+    enum: bacnet.enum.NotifyType,
     value: 0,
   },
   {
     id: bacnet.enum.PropertyIdentifier.EVENT_TIME_STAMPS,
     pidName: "EVENT_TIME_STAMPS",
-    type: bacnet.enum.ApplicationTags.ENUMERATED,
-    value: 0,
+    type: bacnet.enum.ApplicationTags.TIMESTAMP,
+    value: "",
   },
   {
     id: bacnet.enum.PropertyIdentifier.PROFILE_NAME,

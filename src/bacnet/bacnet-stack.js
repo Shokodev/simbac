@@ -1,10 +1,7 @@
 const bacnet = require("bacstack");
 const { object_types, pids } = require("./utils/type-helper");
-const AnalogInput = require("./objects/ANALOG_INPUT");
 const log = require("../logger");
-const { read, addDp } = require("../background-store");
-const AnalogOutput = require("./objects/ANALOG_OUTPUT");
-
+const { read } = require("../background-store");
 
 function createStack() {
 
@@ -18,16 +15,6 @@ function createStack() {
     port: read("port"),
     interface: read("netInterface")
   });
-
-  // create sample datapoint
-  let ex1 = new AnalogInput(0);
-  let ex2 = new AnalogOutput(0);
-  try {
-    addDp(ex1);
-    addDp(ex2);
-  } catch (err) {
-    log.warn(err);
-  }
 
   bacstack.on("whoIs", (data) => {
     log.info(`WhoIs request from: ${data.address}`);
