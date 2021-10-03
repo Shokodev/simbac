@@ -88,6 +88,7 @@ ipcMain.on("GET_STORE", (event) => {
   });
 });
 
+//TODO RENAME TO START_STACK (or similar) and devide stack and device data
 ipcMain.on("CREATE_DEVICE", (event, payload) => {
   try {
     log.info("Save device settings");
@@ -97,8 +98,8 @@ ipcMain.on("CREATE_DEVICE", (event, payload) => {
     save("vendorId", parseInt(payload.vendorId));
     let result = device.start();
     device.bacstack.whoIs();
-    // Read Device Object
-    device.bacstack.readProperty(
+    // Read some datapoint
+    /* device.bacstack.readProperty(
       "localhost",
       { type: 0, instance: 0 },
       85,
@@ -109,7 +110,7 @@ ipcMain.on("CREATE_DEVICE", (event, payload) => {
           log.info(`Found value: ${data.values[0].value}`);
         }
       }
-    );
+    ); */
     event.reply("CREATE_DEVICE", result);
   } catch (err) {
     event.reply("CREATE_DEVICE", err);
@@ -156,6 +157,7 @@ ipcMain.on("NEW_DP", (event, payload) => {
   }
 });
 
+//TODO RENAME TO STOP_STACK (or similar)
 ipcMain.on("DELETE_DEVICE", (event, payload) => {
   log.info(payload);
   let result = device.stop();
