@@ -148,7 +148,7 @@ ipcMain.on("NEW_DP", (event, payload) => {
       }
       return a;
     }, 0);
-    let num = instance + 1;
+    let num = instance === 0 ? 0 : instance + 1;
     log.debug(`Allocate instance number ${num}`);
     event.reply("NEW_DP", new obj(num));
   } catch (err) {
