@@ -9851,7 +9851,7 @@ vm-browserify@^1.0.1:
 
 vue-cli-plugin-electron-builder@~2.1.1:
   version "2.1.1"
-  resolved "https://registry.npmjs.org/vue-cli-plugin-electron-builder/-/vue-cli-plugin-electron-builder-2.1.1.tgz"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-electron-builder/-/vue-cli-plugin-electron-builder-2.1.1.tgz#de8bed25b32e73e28dd08061dd2a3c6bfff73227"
   integrity sha512-ZrxFZ2uxgpwyFUE8LtguYqaTzSfZ1osME1uFlIj/Iz7GtLrATqs23n/BkKEpyEf5nYNAylzIM8ykGAfH/0QdmA==
   dependencies:
     "@vue/cli-shared-utils" "^4.5.6"

@@ -23,7 +23,7 @@ const props = [
     value: 1,
   },
   {
-    id: bacnet.enum.PropertyIdentifier.Description,
+    id: bacnet.enum.PropertyIdentifier.DESCRIPTION,
     pidName: "DESCRIPTION",
     type: bacnet.enum.ApplicationTags.CHARACTER_STRING,
     value: "Analog Value TXT",
