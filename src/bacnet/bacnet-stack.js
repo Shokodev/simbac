@@ -1,7 +1,7 @@
-const bacnet = require("bacstack");
-const { object_types, pids } = require("./utils/type-helper");
-const log = require("../logger");
-const { read } = require("../background-store");
+import bacnet from 'bacstack';
+import { object_types, pids } from './utils/type-helper.js';
+import log from '../logger.js';
+import { read } from '../background-store.js';
 
 function createStack() {
 
@@ -166,4 +166,4 @@ function createStack() {
   return bacstack;
 }
 
-module.exports = { createStack };
+export { createStack };

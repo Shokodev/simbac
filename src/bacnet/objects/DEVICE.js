@@ -1,8 +1,8 @@
-const bacnet = require('bacstack');
-const BacnetObject = require('../bacnet-object');
-const { getObjectList } = require('../../background-store');
+import bacnet from 'bacstack';
+import BacnetObject from '../bacnet-object.js';
+import { getObjectList } from '../../background-store';
 
-class Device extends BacnetObject {
+export default class Device extends BacnetObject {
   constructor(_instance = Number, storeProps = []) {
     super(bacnet.enum.ObjectType.DEVICE, _instance, storeProps);
     if (storeProps.length === 0) {
@@ -373,9 +373,7 @@ const props = [
         type:bacnet.enum.ApplicationTags.CHARACTER_STRING,
         value:"PROFILE1"
     }
-]
-
-module.exports = Device
+];
 
 
  

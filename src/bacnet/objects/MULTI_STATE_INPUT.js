@@ -1,7 +1,7 @@
-const bacnet = require("bacstack");
-const BacnetObject = require("../bacnet-object");
+import bacnet from 'bacstack';
+import BacnetObject from '../bacnet-object.js';
 
-class MultistateInput extends BacnetObject {
+export default class MultistateInput extends BacnetObject {
   constructor(_instance = Number, storeProps = []) {
     super(bacnet.enum.ObjectType.MULTI_STATE_INPUT, _instance, storeProps);
     if (storeProps.length === 0) {
@@ -118,5 +118,3 @@ const props = [
     value: "",
   },
 ];
-
-module.exports = MultistateInput;

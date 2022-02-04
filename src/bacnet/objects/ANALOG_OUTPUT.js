@@ -1,7 +1,7 @@
-const bacnet = require("bacstack");
-const BacnetObject = require("../bacnet-object");
+import bacnet from 'bacstack';
+import BacnetObject from '../bacnet-object.js';
 
-class AnalogOutput extends BacnetObject {
+export default class AnalogOutput extends BacnetObject {
   constructor(_instance = Number, storeProps = []) {
     super(bacnet.enum.ObjectType.ANALOG_OUTPUT, _instance, storeProps);
     if (storeProps.length === 0) {
@@ -175,5 +175,3 @@ const props = [
     value: "",
   },
 ];
-
-module.exports = AnalogOutput;

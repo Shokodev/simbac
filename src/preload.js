@@ -1,5 +1,6 @@
-const log = require("./logger");
-const { contextBridge, ipcRenderer } = require("electron");
+import log from './logger.js';
+import { contextBridge, ipcRenderer } from 'electron';
+
 const validChannels = [
   "CREATE_DEVICE",
   "DELETE_DEVICE",

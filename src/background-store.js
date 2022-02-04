@@ -1,4 +1,4 @@
-const Store = require("electron-store");
+import Store from "electron-store";
 
 const eStore = {
   name: {
@@ -49,4 +49,4 @@ const removeDp = (bacnetObject) => {
 };
 
 
-module.exports = { save, read, remove, addDp, removeDp, getObjectList };
+export { save, read, remove, addDp, removeDp, getObjectList };
