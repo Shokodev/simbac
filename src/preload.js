@@ -1,8 +1,8 @@
 const log = require("./logger");
 const { contextBridge, ipcRenderer } = require("electron");
 const validChannels = [
-  "CREATE_DEVICE",
-  "DELETE_DEVICE",
+  "START_STACK",
+  "STOP_STACK",
   "GET_STORE",
   "ADD_DP",
   "REMOVE_DP",

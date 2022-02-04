@@ -99,7 +99,7 @@ export default {
     bacnetStackStopped: { state: false, color: "red" },
   }),
   mounted() {
-    window.ipc.on("CREATE_DEVICE", (e) => {
+    window.ipc.on("START_STACK", (e) => {
       if (e !== "started") {
         this.errorText = e;
         this.alert = true;
@@ -108,7 +108,7 @@ export default {
         this.SET_IS_RUNNING(true);
       }
     });
-    window.ipc.on("DELETE_DEVICE", (e) => {
+    window.ipc.on("STOP_STACK", (e) => {
       if (e !== "stopped") {
         this.errorText = e;
         this.alert = true;
@@ -121,10 +121,10 @@ export default {
   },
   methods: {
     start() {
-      window.ipc.send("CREATE_DEVICE", this.GET_ESTORE);
+      window.ipc.send("START_STACK", this.GET_ESTORE);
     },
     stop() {
-      window.ipc.send("DELETE_DEVICE", "STOP");
+      window.ipc.send("STOP_STACK", "STOP");
     },
     alertEvent() {
       this.alert = false;
