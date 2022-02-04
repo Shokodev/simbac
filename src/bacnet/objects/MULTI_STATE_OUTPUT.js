@@ -1,8 +1,9 @@
-import bacnet from "bacstack";
-import BacnetObject  from "../bacnet-object";
-export default class BinaryInput extends BacnetObject {
+const bacnet = require("bacstack");
+const BacnetObject = require("../bacnet-object");
+
+class MultistateOutput extends BacnetObject {
   constructor(_instance = Number, storeProps = []) {
-    super(bacnet.enum.ObjectType.BINARY_INPUT, _instance, storeProps);
+    super(bacnet.enum.ObjectType.MULTI_STATE_OUTPUT, _instance, storeProps);
     if (storeProps.length === 0) {
       props.forEach((prop) => {
         this.properties.push(prop);
@@ -17,15 +18,14 @@ const props = [
   {
     id: bacnet.enum.PropertyIdentifier.PRESENT_VALUE,
     pidName: "PRESENT_VALUE",
-    type: bacnet.enum.ApplicationTags.ENUMERATED,
-    enum: bacnet.enum.BinaryPV,
+    type: bacnet.enum.ApplicationTags.UNSIGNED_INTEGER,
     value: 1,
   },
   {
     id: bacnet.enum.PropertyIdentifier.DESCRIPTION,
     pidName: "DESCRIPTION",
     type: bacnet.enum.ApplicationTags.CHARACTER_STRING,
-    value: "Analog Value TXT",
+    value: "Multistate Input TXT",
   },
   {
     id: bacnet.enum.PropertyIdentifier.DEVICE_TYPE,
@@ -61,53 +61,16 @@ const props = [
     value: 0,
   },
   {
-    id: bacnet.enum.PropertyIdentifier.POLARITY,
-    pidName: "POLARITY",
-    type: bacnet.enum.ApplicationTags.ENUMERATED,
-    enum: bacnet.enum.Polarity,
-    value: 0,
-  },
-  {
-    id: bacnet.enum.PropertyIdentifier.INACTIVE_TEXT,
-    pidName: "INACTIVE_TEXT",
-    type: bacnet.enum.ApplicationTags.CHARACTER_STRING,
-    value: "off",
-  },
-  {
-    id: bacnet.enum.PropertyIdentifier.ACTIVE_TEXT,
-    pidName: "ACTIVE_TEXT",
-    type: bacnet.enum.ApplicationTags.CHARACTER_STRING,
-    value: "on",
-  },
-  {
-    id: bacnet.enum.PropertyIdentifier.CHANGE_OF_STATE_TIME,
-    pidName: "CHANGE_OF_STATE_TIME",
-    type: bacnet.enum.ApplicationTags.DATETIME,
-    value: "",
-  },
-  {
-    id: bacnet.enum.PropertyIdentifier.CHANGE_OF_STATE_COUNT,
-    pidName: "CHANGE_OF_STATE_COUNT",
+    id: bacnet.enum.PropertyIdentifier.NUMBER_OF_STATES,
+    pidName: "NUMBER_OF_STATES",
     type: bacnet.enum.ApplicationTags.UNSIGNED_INTEGER,
-    value: "",
+    value: 2,
   },
   {
-    id: bacnet.enum.PropertyIdentifier.TIME_OF_STATE_COUNT_RESET,
-    pidName: "TIME_OF_STATE_COUNT_RESET",
-    type: bacnet.enum.ApplicationTags.DATETIME,
-    value: "",
-  },
-  {
-    id: bacnet.enum.PropertyIdentifier.ELAPSED_ACTIVE_TIME,
-    pidName: "ELAPSED_ACTIVE_TIME",
-    type: bacnet.enum.ApplicationTags.UNSIGNED_INTEGER,
-    value: 0,
-  },
-  {
-    id: bacnet.enum.PropertyIdentifier.TIME_OF_ACTIVE_TIME_RESET,
-    pidName: "TIME_OF_ACTIVE_TIME_RESET",
-    type: bacnet.enum.ApplicationTags.DATETIME,
-    value: "",
+    id: bacnet.enum.PropertyIdentifier.STATE_TEXT,
+    pidName: "STATE_TEXT",
+    type: bacnet.enum.ApplicationTags.CHARACTER_STRING,
+    value: "Stufe 1, Stufe 2",
   },
   {
     id: bacnet.enum.PropertyIdentifier.NOTIFICATION_CLASS,
@@ -118,8 +81,7 @@ const props = [
   {
     id: bacnet.enum.PropertyIdentifier.ALARM_VALUE,
     pidName: "ALARM_VALUE",
-    type: bacnet.enum.ApplicationTags.ENUMERATED,
-    enum: bacnet.enum.BinaryPV,
+    type: bacnet.enum.ApplicationTags.UNSIGNED_INTEGER,
     value: 1,
   },
   {
@@ -127,7 +89,7 @@ const props = [
     pidName: "EVENT_ENABLED",
     type: bacnet.enum.ApplicationTags.ENUMERATED,
     enum: bacnet.enum.EventTransitionBits,
-    value: false,
+    value: 0,
   },
   {
     id: bacnet.enum.PropertyIdentifier.ACKED_TRANSITIONS,
@@ -156,3 +118,5 @@ const props = [
     value: "",
   },
 ];
+
+module.exports = MultistateOutput;

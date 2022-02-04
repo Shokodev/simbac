@@ -26,6 +26,7 @@ const eStore = {
 
 const save = (propName, payload) => store.set(propName, payload);
 const read = (propName) => store.get(propName);
+const remove = (propName) => store.delete(propName);
 const getObjectList = () => store.get('dp').map(dp=>dp.oid);
 
 const store = new Store({ schema: eStore });
@@ -48,4 +49,4 @@ const removeDp = (bacnetObject) => {
 };
 
 
-module.exports = { save, read, addDp, removeDp, getObjectList };
+module.exports = { save, read, remove, addDp, removeDp, getObjectList };
