@@ -3,7 +3,7 @@ const { read, save, remove } = require("../src/background-store.js");
 
 // eslint-disable-next-line no-undef
 test("concurrent SRR store penetration", async() => {
-  let count = 500;
+  let count = 5000;
   let proms = [];
   for (let i = 1; i <= count; i++) {
     process.stdout.write(`counter: ${i}`);  

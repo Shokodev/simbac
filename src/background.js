@@ -143,13 +143,15 @@ ipcMain.on("NEW_DP", async(event, payload) => {
     let obj = await import(`./bacnet/objects/${payload}.js`);
     let instance = read("dp").reduce((a, v) => {
       if (object_types[v.oid.split(":")[0]] === payload) {
+        a = 0;
         if (parseInt(v.oid.split(":")[1]) > a) {
           return parseInt(v.oid.split(":")[1]);
         } else return a;
       }
       return a;
-    }, 0);
-    let num = instance === 0 ? 0 : instance + 1;
+    }, null);
+    console.log(instance);
+    let num = instance === null ? 0 : instance + 1;
     log.debug(`Allocate instance number ${num}`);
     const dp = obj.default;
     event.reply("NEW_DP", new dp(num));
