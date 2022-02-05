@@ -2,7 +2,7 @@
   "name": "simbac",
   "version": "0.0.1",
   "private": true,
-  "description": "",
+  "description": "Simulate bacnet device",
   "author": {
     "name": "Shokodev",
     "email": "info@shokodev.ch",

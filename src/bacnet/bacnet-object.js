@@ -1,5 +1,5 @@
-const bacnet = require("bacstack");
-const { object_types } = require("./utils/type-helper");
+import bacnet from 'bacstack';
+import { object_types } from './utils/type-helper.js';
 
 const getCleanType = (t, i) =>
   t
@@ -12,7 +12,7 @@ const getCleanType = (t, i) =>
     }, "")
     .trim() + ` ${i}`;
 
-class BacnetObject {
+export default class BacnetObject {
   //cast in type while using from Estore
   constructor(
     _type = bacnet.enum.ObjectType,
@@ -49,5 +49,3 @@ class BacnetObject {
     }
   }
 }
-
-module.exports = BacnetObject;

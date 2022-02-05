@@ -1,5 +1,6 @@
-import bacnet from "bacstack";
-import BacnetObject  from "../bacnet-object";
+import bacnet from 'bacstack';
+import BacnetObject from '../bacnet-object.js';
+
 export default class BinaryInput extends BacnetObject {
   constructor(_instance = Number, storeProps = []) {
     super(bacnet.enum.ObjectType.BINARY_INPUT, _instance, storeProps);

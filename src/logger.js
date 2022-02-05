@@ -1,6 +1,7 @@
-const Transport = require("winston-transport");
-const { createLogger, transports, format } = require("winston");
-const window = require("electron").BrowserWindow;
+import Transport from 'winston-transport';
+import { BrowserWindow } from 'electron';
+import pkg from 'winston';
+const { createLogger, transports, format } = pkg;
 
 class ConsoleFrontend extends Transport {
   constructor(opts) {
@@ -11,7 +12,7 @@ class ConsoleFrontend extends Transport {
     setImmediate(() => {
       this.emit("logged", info);
     });
-    let win = window.getFocusedWindow();
+    let win = BrowserWindow.getFocusedWindow();
     win.webContents.send("CONSOLE_MSG", {
       level: info.level,
       message: info.message,
@@ -41,4 +42,5 @@ const logger = createLogger({
   ],
 });
 
-module.exports = logger;
+export default logger;
+

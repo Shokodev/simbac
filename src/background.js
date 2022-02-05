@@ -1,10 +1,10 @@
-const { app, BrowserWindow, ipcMain, globalShortcut } = require("electron");
-const { save, read, addDp, removeDp } = require("./background-store");
-import path from "path";
-import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
-import { object_types } from "./bacnet/utils/type-helper";
+import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron';
+import { save, read, addDp, removeDp } from './background-store.js';
+import path from 'path';
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
+import { object_types } from './bacnet/utils/type-helper.js';
+import log from './logger.js';
 const isDevelopment = process.env.NODE_ENV !== "production";
-const log = require("./logger");
 
 //Create Window and load index.html & preload.js
 function createWindow() {
@@ -70,11 +70,11 @@ app.whenReady().then(async () => {
   console.log(read('netInterface')); 
 });
 
-const BACnetDevice = require("./bacnet/bacnet-device");
+import BACnetDevice from './bacnet/bacnet-device.js';
 const device = new BACnetDevice();
-const bacnet = require("bacstack").enum;
+import bacnet from 'bacstack';
+import os from 'os';
 
-const os = require('os');
 ipcMain.on("GET_STORE", (event) => {
   event.reply("GET_STORE", {
     name: read("name"),
@@ -82,7 +82,7 @@ ipcMain.on("GET_STORE", (event) => {
     deviceId: read("deviceId"),
     vendorId: read("vendorId"),
     isRunning: device.bacstack ? true : false,
-    objectTypes: bacnet.ObjectType,
+    objectTypes: bacnet.enum.ObjectType,
     netInterfaces: os.networkInterfaces(),
     dp: read("dp"),
   });
@@ -98,7 +98,7 @@ ipcMain.on("START_STACK", (event, payload) => {
     let result = device.start();
     device.bacstack.whoIs();
     // Read some datapoint
-    /* device.bacstack.readProperty(
+    /** device.bacstack.readProperty(
       "localhost",
       { type: 0, instance: 0 },
       85,
@@ -136,10 +136,10 @@ ipcMain.on("REMOVE_DP", (event, payload) => {
   }
 });
 
-ipcMain.on("NEW_DP", (event, payload) => {
+ipcMain.on("NEW_DP", async(event, payload) => {
   try {
     log.info(`Create new: ${payload}`);
-    let obj = require(`./bacnet/objects/${payload}`);
+    let obj = await import(`./bacnet/objects/${payload}.js`);
     let instance = read("dp").reduce((a, v) => {
       if (object_types[v.oid.split(":")[0]] === payload) {
         if (parseInt(v.oid.split(":")[1]) > a) {
@@ -150,7 +150,8 @@ ipcMain.on("NEW_DP", (event, payload) => {
     }, 0);
     let num = instance === 0 ? 0 : instance + 1;
     log.debug(`Allocate instance number ${num}`);
-    event.reply("NEW_DP", new obj(num));
+    const dp = obj.default;
+    event.reply("NEW_DP", new dp(num));
   } catch (err) {
     event.reply("NEW_DP", err);
   }

@@ -1,10 +1,10 @@
-const log = require("../logger");
-const {createStack} = require("./bacnet-stack");
-const { addDp, read } = require("../background-store");
-const Device = require('./objects/DEVICE');
-const logger = require("../logger");
+import log from '../logger.js';
+import {createStack} from './bacnet-stack.js';
+import { addDp, read } from '../background-store';
+import Device from './objects/DEVICE.js';
+import logger  from '../logger.js';
 
-class BacnetDevice {
+export default class BacnetDevice {
   
   start() {
     log.info("starting shoko bacnet stack");
@@ -42,5 +42,3 @@ class BacnetDevice {
   }
   
 }
-
-module.exports = BacnetDevice;
