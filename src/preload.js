@@ -2,8 +2,8 @@ import log from './logger.js';
 import { contextBridge, ipcRenderer } from 'electron';
 
 const validChannels = [
-  "CREATE_DEVICE",
-  "DELETE_DEVICE",
+  "START_STACK",
+  "STOP_STACK",
   "GET_STORE",
   "ADD_DP",
   "REMOVE_DP",

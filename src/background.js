@@ -88,8 +88,7 @@ ipcMain.on("GET_STORE", (event) => {
   });
 });
 
-//TODO RENAME TO START_STACK (or similar) and devide stack and device data
-ipcMain.on("CREATE_DEVICE", (event, payload) => {
+ipcMain.on("START_STACK", (event, payload) => {
   try {
     log.info("Save device settings");
     save("name", payload.name);
@@ -110,10 +109,10 @@ ipcMain.on("CREATE_DEVICE", (event, payload) => {
           log.info(`Found value: ${data.values[0].value}`);
         }
       }
-    );*/
-    event.reply("CREATE_DEVICE", result);
+    ); */
+    event.reply("START_STACK", result);
   } catch (err) {
-    event.reply("CREATE_DEVICE", err);
+    event.reply("START_STACK", err);
   }
 });
 
@@ -160,9 +159,8 @@ ipcMain.on("NEW_DP", async(event, payload) => {
   }
 });
 
-//TODO RENAME TO STOP_STACK (or similar)
-ipcMain.on("DELETE_DEVICE", (event, payload) => {
+ipcMain.on("STOP_STACK", (event, payload) => {
   log.info(payload);
   let result = device.stop();
-  event.reply("DELETE_DEVICE", result);
+  event.reply("STOP_STACK", result);
 });
