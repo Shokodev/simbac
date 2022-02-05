@@ -80,7 +80,7 @@
 import DeviceSettings from "@/components/DeviceSettings.vue";
 import { mapActions, mapGetters } from "vuex";
 import DatapointTree from "@/components/DatapointTree.vue";
-import AddDatapoint from "../components/AddDatapoint.vue";
+import AddDatapoint from "@/components/AddDatapoint.vue";
 
 export default {
   name: "Device",
