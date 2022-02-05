@@ -1,5 +1,6 @@
-import bacnet from 'bacstack';
-import BacnetObject from '../bacnet-object.js';
+import bacnet from "bacstack";
+import BacnetObject from "../bacnet-object.js";
+import { viewDepth } from "../utils/type-helper";
 
 export default class AnalogInput extends BacnetObject {
   constructor(_instance = Number, storeProps = []) {
@@ -20,18 +21,21 @@ const props = [
     pidName: "PRESENT_VALUE",
     type: bacnet.enum.ApplicationTags.REAL,
     value: 1.1,
+    depth: viewDepth.base,
   },
   {
     id: bacnet.enum.PropertyIdentifier.DESCRIPTION,
     pidName: "DESCRIPTION",
     type: bacnet.enum.ApplicationTags.CHARACTER_STRING,
     value: "Analog Value TXT",
+    depth: viewDepth.base,
   },
   {
     id: bacnet.enum.PropertyIdentifier.DEVICE_TYPE,
     pidName: "DEVICE_TYPE",
     type: bacnet.enum.ApplicationTags.CHARACTER_STRING,
     value: "",
+    depth: viewDepth.all,
   },
   {
     id: bacnet.enum.PropertyIdentifier.STATUS_FLAGS,
@@ -39,6 +43,7 @@ const props = [
     type: bacnet.enum.ApplicationTags.ENUMERATED,
     enum: bacnet.enum.StatusFlags,
     value: 3,
+    depth: viewDepth.extended,
   },
   {
     id: bacnet.enum.PropertyIdentifier.EVENT_STATE,
@@ -46,6 +51,7 @@ const props = [
     type: bacnet.enum.ApplicationTags.ENUMERATED,
     enum: bacnet.enum.EventState,
     value: 0,
+    depth: viewDepth.extended,
   },
   {
     id: bacnet.enum.PropertyIdentifier.RELIABILITY,
@@ -53,18 +59,21 @@ const props = [
     type: bacnet.enum.ApplicationTags.ENUMERATED,
     enum: bacnet.enum.Reliability,
     value: 0,
+    depth: viewDepth.extended,
   },
   {
     id: bacnet.enum.PropertyIdentifier.OUT_OF_SERVCIE,
     pidName: "OUT_OF_SERVCIE",
     type: bacnet.enum.ApplicationTags.BOOLEAN,
     value: 0,
+    depth: viewDepth.extended,
   },
   {
     id: bacnet.enum.PropertyIdentifier.UPDATE_INTERVAL,
     pidName: "UPDATE_INTERVAL",
     type: bacnet.enum.ApplicationTags.UNSIGNED_INTEGER,
     value: 0,
+    depth: viewDepth.all,
   },
   {
     id: bacnet.enum.PropertyIdentifier.UNITS,
@@ -72,60 +81,70 @@ const props = [
     type: bacnet.enum.ApplicationTags.ENUMERATED,
     enum: bacnet.enum.EngineeringUnits,
     value: 0,
+    depth: viewDepth.base,
   },
   {
     id: bacnet.enum.PropertyIdentifier.MIN_PRES_VALUE,
     pidName: "MIN_PRES_VALUE",
     type: bacnet.enum.ApplicationTags.REAL,
     value: 0,
+    depth: viewDepth.extended,
   },
   {
     id: bacnet.enum.PropertyIdentifier.MAX_PRES_VALUE,
     pidName: "MAX_PRES_VALUE",
     type: bacnet.enum.ApplicationTags.REAL,
     value: 20,
+    depth: viewDepth.extended,
   },
   {
     id: bacnet.enum.PropertyIdentifier.RESOLUTION,
     pidName: "RESOLUTION",
     type: bacnet.enum.ApplicationTags.REAL,
     value: 1,
+    depth: viewDepth.all,
   },
   {
     id: bacnet.enum.PropertyIdentifier.COV_INCREMENT,
     pidName: "COV_INCREMENT",
     type: bacnet.enum.ApplicationTags.REAL,
     value: 1,
+    depth: viewDepth.all,
   },
   {
     id: bacnet.enum.PropertyIdentifier.TIME_DELAY,
     pidName: "TIME_DELAY",
     type: bacnet.enum.ApplicationTags.UNSIGNED_INTEGER,
     value: "",
+    depth: viewDepth.all,
   },
   {
     id: bacnet.enum.PropertyIdentifier.NOTIFICATION_CLASS,
     pidName: "NOTIFICATION_CLASS",
     type: bacnet.enum.ApplicationTags.UNSIGNED_INTEGER,
     value: 1,
+    depth: viewDepth.all,
   },
   {
     id: bacnet.enum.PropertyIdentifier.HIGH_LIMIT,
     pidName: "HIGH_LIMIT",
     type: bacnet.enum.ApplicationTags.REAL,
     value: 20,
+    depth: viewDepth.extended,
   },
   {
     id: bacnet.enum.PropertyIdentifier.LOW_LIMIT,
     pidName: "LOW_LIMIT",
     type: bacnet.enum.ApplicationTags.REAL,
     value: 0,
+    depth: viewDepth.extended,
   },
   {
     id: bacnet.enum.PropertyIdentifier.DEADBAND,
     pidName: "DEADBAND",
     type: bacnet.enum.ApplicationTags.REAL,
     value: 0,
+    depth: viewDepth.extended,
   },
   {
     id: bacnet.enum.PropertyIdentifier.LIMIT_ENABLED,
@@ -133,6 +152,7 @@ const props = [
     type: bacnet.enum.ApplicationTags.ENUMERATED,
     enum: bacnet.enum.LimitEnable,
     value: false,
+    depth: viewDepth.extended,
   },
   {
     id: bacnet.enum.PropertyIdentifier.EVENT_ENABLED,
@@ -140,6 +160,7 @@ const props = [
     type: bacnet.enum.ApplicationTags.ENUMERATED,
     enum: bacnet.enum.EventTransitionBits,
     value: 0,
+    depth: viewDepth.extended,
   },
   {
     id: bacnet.enum.PropertyIdentifier.ACKED_TRANSITIONS,
@@ -147,6 +168,7 @@ const props = [
     type: bacnet.enum.ApplicationTags.ENUMERATED,
     enum: bacnet.enum.EventTransitionBits,
     value: 0,
+    depth: viewDepth.all,
   },
   {
     id: bacnet.enum.PropertyIdentifier.NOTIFY_TYPE,
@@ -154,17 +176,20 @@ const props = [
     type: bacnet.enum.ApplicationTags.ENUMERATED,
     enum: bacnet.enum.NotifyType,
     value: 0,
+    depth: viewDepth.all,
   },
   {
     id: bacnet.enum.PropertyIdentifier.EVENT_TIME_STAMPS,
     pidName: "EVENT_TIME_STAMPS",
     type: bacnet.enum.ApplicationTags.TIMESTAMP,
     value: "",
+    depth: viewDepth.all,
   },
   {
     id: bacnet.enum.PropertyIdentifier.PROFILE_NAME,
     pidName: "PROFILE_NAME",
     type: bacnet.enum.ApplicationTags.CHARACTER_STRING,
     value: "",
+    depth: viewDepth.all,
   },
 ];

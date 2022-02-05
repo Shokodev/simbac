@@ -1,4 +1,4 @@
-import bacnet from 'bacstack';
+import bacnet from "bacstack";
 
 let object_types = Object.keys(bacnet.enum.ObjectType).reduce((a, v) => {
   a[bacnet.enum.ObjectType[v]] = v;
@@ -10,7 +10,10 @@ let pids = Object.keys(bacnet.enum.PropertyIdentifier).reduce((a, v) => {
   return a;
 }, {});
 
-export {
-  object_types,
-  pids,
+const viewDepth = {
+  base: 0,
+  extended: 1,
+  all: 2,
 };
+
+export { object_types, pids, viewDepth };
