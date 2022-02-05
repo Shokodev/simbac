@@ -10,7 +10,14 @@ let pids = Object.keys(bacnet.enum.PropertyIdentifier).reduce((a, v) => {
   return a;
 }, {});
 
+const viewDepth =  {  
+  base: 0,
+  extended: 1,
+  all: 2
+}
+
 module.exports = {
   object_types,
   pids,
+  viewDepth
 };

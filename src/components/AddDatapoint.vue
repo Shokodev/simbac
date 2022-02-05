@@ -15,6 +15,7 @@
             required
           ></v-select
         ></v-container>
+        <datapoint-properties :datapoint="dp"></datapoint-properties>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -35,9 +36,13 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
+import DatapointProperties from "@/components/DatapointProperties.vue";
 
 export default {
   name: "AddDatapoint",
+  components: {
+    DatapointProperties,
+  },
   props: {
     showDialog: Boolean,
   },
@@ -45,7 +50,7 @@ export default {
     return {
       dialog: this.showDialog,
       objectType: "",
-      dp: {},
+      dp: null,
     };
   },
   mounted() {
@@ -68,7 +73,7 @@ export default {
       }
     },
     changeType() {
-      this.dp = {};
+      this.dp = null;
       window.ipc.send("NEW_DP", this.objectType);
     },
     ...mapActions(["READ_ESTORE"]),
