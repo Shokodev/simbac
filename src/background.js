@@ -28,7 +28,7 @@ function createWindow() {
     height: 400,
     transparent: true,
     frame: false,
-    alwaysOnTop: true,
+    alwaysOnTop: false,
   });
   splash.setResizable(false);
   // eslint-disable-next-line no-undef
@@ -67,7 +67,6 @@ app.whenReady().then(async () => {
     save("dp", [])  ;
   })
   createWindow();
-  console.log(read('netInterface')); 
 });
 
 import BACnetDevice from './bacnet/bacnet-device.js';
@@ -81,6 +80,7 @@ ipcMain.on("GET_STORE", (event) => {
     port: read("port"),
     deviceId: read("deviceId"),
     vendorId: read("vendorId"),
+    netInterface: read("netInterface"),
     isRunning: device.bacstack ? true : false,
     objectTypes: bacnet.enum.ObjectType,
     netInterfaces: os.networkInterfaces(),
@@ -95,6 +95,7 @@ ipcMain.on("START_STACK", (event, payload) => {
     save("port", parseInt(payload.port));
     save("deviceId", parseInt(payload.deviceId));
     save("vendorId", parseInt(payload.vendorId));
+    save("netInterface", payload.netInterface);
     let result = device.start();
     device.bacstack.whoIs();
     // Read some datapoint

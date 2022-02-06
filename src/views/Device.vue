@@ -132,7 +132,7 @@ export default {
     },
     deviceSettingsEvent(eStore) {
       this.deviceSettings = false;
-      this.SET_ESTORE(eStore);
+      if(eStore) this.SET_ESTORE(eStore);
     },
     ...mapActions(["READ_ESTORE", "SET_IS_RUNNING", "SET_ESTORE"]),
   },

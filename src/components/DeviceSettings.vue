@@ -52,6 +52,14 @@
                 required
               ></v-text-field>
             </v-col>
+            <v-col cols="12" sm="12">
+              <v-select
+                :items="getNetworkInterfaces"
+                v-model="data.netInterface"
+                label="Network Interface"
+                required
+              ></v-select>
+            </v-col>
           </v-row>
         </v-container>
       </v-card-text>
@@ -112,6 +120,19 @@ export default {
     },
     cancel() {
       this.$emit("save", null);
+    },
+  },
+  computed: {
+    getNetworkInterfaces() {
+      let interfaces = [];
+      Object.keys(this.device.netInterfaces).forEach((key) => {
+        let node = this.device.netInterfaces[key][0];
+        interfaces.push({
+          value: node.address,
+          text: `Name: [${key}] Address: [${node.address}]`,
+        });
+      });
+      return interfaces;
     },
   },
 };
