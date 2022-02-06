@@ -13,7 +13,7 @@ function createWindow() {
     width: 1200,
     height: 800,
     show: false,
-    alwaysOnTop: true,
+    alwaysOnTop: false,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
