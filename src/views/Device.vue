@@ -14,6 +14,7 @@
           <v-card-text>
             <div>Port: {{ eStore.port }}</div>
             <div>Device ID: {{ eStore.deviceId }}</div>
+            <div>IP-Address: {{  eStore.netInterface !== "127.0.0.1" ? eStore.netInterface : "Interface set to localhost" }}</div>
           </v-card-text>
           <v-card-actions>
             <v-btn @click="start" :color="running ? 'green' : ''">Run</v-btn>

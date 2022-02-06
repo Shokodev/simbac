@@ -44,7 +44,6 @@
                 required
               ></v-text-field>
             </v-col>
-
             <v-col cols="12" sm="6">
               <v-text-field
                 v-model="data.vendorId"
@@ -126,11 +125,14 @@ export default {
     getNetworkInterfaces() {
       let interfaces = [];
       Object.keys(this.device.netInterfaces).forEach((key) => {
-        let node = this.device.netInterfaces[key][0];
-        interfaces.push({
-          value: node.address,
-          text: `Name: [${key}] Address: [${node.address}]`,
-        });
+        const node = this.device.netInterfaces[key].find(
+          (element) => element.family === "IPv4"
+        );
+        node &&
+          interfaces.push({
+            value: node.address,
+            text: `Name: [${key}] Address: [${node.address}]`,
+          });
       });
       return interfaces;
     },
