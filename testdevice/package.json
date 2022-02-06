@@ -8,6 +8,6 @@
     "bacstack": "^0.0.1-beta.14"
   },
   "scripts": {
-    "start": "node index.js"
+    "local": "node index.js"
   }
 }

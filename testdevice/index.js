@@ -1,5 +1,4 @@
 import bacnet from 'bacstack';
-import os from 'os';
 
 const deviceId = process.env.DEVICEID || 1234;
 const port = process.env.BACPORT || 47808;
@@ -7,13 +6,17 @@ const CMD = {
     info:(msg)=>{console.log(`[INFO]  : ${msg}`)},
     error:(msg)=>{console.log(`[ERROR]: ${msg}`)},
 };
+
+
+if(!process.env.INTERFACE){
+     CMD.error('You need to specify the network interface with ENV, as example INTERFACE=192.168.0.50');
+     process.exit(0);
+} 
+
 const bacstack = new bacnet({
     port: port,
-    interface: '0.0.0.0',
+    interface: process.env.INTERFACE,
 });
-
-CMD.info("Try get interfaces: ..")
-console.log(os.networkInterfaces());  
 
 bacstack.on("whoIs", (data) => {
     CMD.info(`Who is request received from ${data.deviceId}`);
@@ -25,8 +28,7 @@ bacstack.on("whoIs", (data) => {
         99
         ); 
     });
-CMD.info("Try to send whoIs");    
-bacstack.whoIs();
+
 
 bacstack.on('error', (err) => {
     CMD.error(`Stack failed with: ${err}`);
@@ -34,21 +36,29 @@ bacstack.on('error', (err) => {
     process.exit(2);
 });
 
-CMD.info(`Test device started with id: [${deviceId}] on: [127.0.0.1:${port}]`);
+CMD.info(`Test device started with id: [${deviceId}] on: [${process.env.INTERFACE}:${port}]`);
 process.stdin.setEncoding("utf8");
 process.stdin.on("data", async (data) => {
     let input = data.trim();
-    if(input === "exit") process.exit(0);
+    if(input === 'exit') process.exit(0);
+    if(input.startsWith('whois')) {
+        let splits = input.split(' ');
+        CMD.info("Sending whoIs . . .");
+        if(splits[1]){
+            bacstack.whoIs({address:splits[1]});    
+        } else {
+            bacstack.whoIs();
+        }
+    }
     if(input.startsWith('read')) {
         let splits = input.split(' ');
-        if(splits.length === 1){
-            CMD.error("Wrong Parameter");
+        if(splits.length !== 4){
+            CMD.error("Wrong Parameter, use example: read 192.168.0.50 0:3 85");
         } else {
             await readprop(splits);
         }
     }
 });
-
 
 const readprop = async (s) => {
     try {
