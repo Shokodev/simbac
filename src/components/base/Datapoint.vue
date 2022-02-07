@@ -1,22 +1,14 @@
 <template>
   <div v-if="dp">
-    <v-tabs fixed-tabs background-color="grey lighten-4" dark>
-      <v-tab
-      v-model="tab"
-      >
-        Base
-      </v-tab>
-      <v-tab>
-        Extended
-      </v-tab>
-      <v-tab>
-        All
+    <v-tabs v-model="tab" fixed-tabs background-color="secondary">
+      <v-tab v-for="depth in depths" :key="depth">
+        {{ depth }}
       </v-tab>
     </v-tabs>
-    <v-tabs-items v-model="tab">
-      <v-tab-item>
+    <v-tabs-items v-model="tab" class="pt-2">
+      <v-tab-item v-for="depth in depths" :key="depth">
         <div v-for="property in dp.properties" :key="property.oid">
-          <div v-if="property.depth == viewDepth.base">
+          <div v-if="property.depth == viewDepth[depth]">
             <baseProperty :property="property"></baseProperty>
           </div>
         </div>
@@ -41,6 +33,7 @@ export default {
     return {
       dp: this.datapoint,
       tab: null,
+      depths: ["base", "extended", "all"],
     };
   },
   computed: {
