@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron';
 import { save, read, addDp, removeDp } from './background-store.js';
 import path from 'path';
+import fs from 'fs';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 import { object_types } from './bacnet/utils/type-helper.js';
 import log from './logger.js';
@@ -84,6 +85,7 @@ ipcMain.on("GET_STORE", (event) => {
     netInterface: read("netInterface"),
     isRunning: device.bacstack ? true : false,
     objectTypes: bacnet.enum.ObjectType,
+    supportedObjectTypes:getSupportedTypes(),
     netInterfaces: os.networkInterfaces(),
     dp: read("dp"),
   });
@@ -151,7 +153,6 @@ ipcMain.on("NEW_DP", async(event, payload) => {
       }
       return a;
     }, null);
-    console.log(instance);
     let num = instance === null ? 0 : instance + 1;
     log.debug(`Allocate instance number ${num}`);
     const dp = obj.default;
@@ -166,3 +167,14 @@ ipcMain.on("STOP_STACK", (event, payload) => {
   let result = device.stop();
   event.reply("STOP_STACK", result);
 });
+
+//TODO Check if path is correct when app is build
+const getSupportedTypes = () => {
+  try {
+    let path = process.cwd() + '/src/bacnet/objects';
+    return fs.readdirSync(path).map(f=>f.replace('.js','')).filter(f=>f !== 'DEVICE');
+  } catch (err){
+    log.error(`Could not load supported object types from: ${path}`);
+    return [];
+  }
+}

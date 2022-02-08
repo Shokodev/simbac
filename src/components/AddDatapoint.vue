@@ -9,7 +9,7 @@
         <v-container>
           <v-select
             v-model="objectType"
-            :items="Object.keys(GET_ESTORE.objectTypes)"
+            :items="GET_ESTORE.supportedObjectTypes"
             @change="changeType"
             label="Choose Object Type"
             required

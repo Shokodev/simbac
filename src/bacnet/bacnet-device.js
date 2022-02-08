@@ -2,7 +2,6 @@ import log from '../logger.js';
 import {createStack} from './bacnet-stack.js';
 import { addDp, read } from '../background-store';
 import Device from './objects/DEVICE.js';
-import logger  from '../logger.js';
 
 export default class BacnetDevice {
   
@@ -14,12 +13,12 @@ export default class BacnetDevice {
       let device = read('dp').find(dp=>dp.oid === '8:0');
       if(device){
         let model = device.properties.find(p=>p.id === 70);
-        logger.debug(`restored device object ${model.value}`)
+        log.debug(`restored device object ${model.value}`)
       } else {
         let device = new Device(0); 
         addDp(device);
         let model = device.properties.find(p=>p.id === 70);
-        logger.debug(`created new default device ${model.value}`)
+        log.debug(`created new default device ${model.value}`)
       }
       return 'started';
     } catch (err) {
