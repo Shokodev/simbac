@@ -62,6 +62,7 @@ app.whenReady().then(async () => {
   globalShortcut.register('Alt+CommandOrControl+D', () => {
     save("name", "device1");
     save("port", 47808);
+    save("netInterface", "127.0.0.1");
     save("deviceId", 1234);
     save("vendorId", 7);
     save("dp", [])  ;
@@ -96,11 +97,11 @@ ipcMain.on("START_STACK", (event, payload) => {
     save("deviceId", parseInt(payload.deviceId));
     save("vendorId", parseInt(payload.vendorId));
     save("netInterface", payload.netInterface);
-    let result = device.start();
+    const result = device.start();
     device.bacstack.whoIs();
     // Read some datapoint
-    /** device.bacstack.readProperty(
-      "localhost",
+/*     device.bacstack.readProperty(
+      "192.168.1.130",
       { type: 0, instance: 0 },
       85,
       (err, data) => {
@@ -110,7 +111,7 @@ ipcMain.on("START_STACK", (event, payload) => {
           log.info(`Found value: ${data.values[0].value}`);
         }
       }
-    ); */
+    );  */
     event.reply("START_STACK", result);
   } catch (err) {
     event.reply("START_STACK", err);
