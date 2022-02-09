@@ -6,21 +6,23 @@
           <template #title>
             BACnet STACK
           </template>
-          <template #subtitle>
-            <div class="text-caption">
-              {{ eStore.name }}
-            </div>
-          </template>
           <v-card-text>
+            <div>Bacnet ID: {{ eStore.bacnetId }}</div>
             <div>Port: {{ eStore.port }}</div>
-            <div>Device ID: {{ eStore.deviceId }}</div>
-            <div>IP-Address: {{  eStore.netInterface !== "127.0.0.1" ? eStore.netInterface : "Interface set to localhost" }}</div>
+            <div>
+              IP-Address:
+              {{
+                eStore.netInterface !== "127.0.0.1"
+                  ? eStore.netInterface
+                  : "Interface set to localhost"
+              }}
+            </div>
           </v-card-text>
           <v-card-actions>
             <v-btn @click="start" :color="running ? 'green' : ''">Run</v-btn>
             <v-btn @click="stop" :color="!running ? 'red' : ''">Stop</v-btn>
             <v-spacer></v-spacer>
-            <v-btn @click="deviceSettings = true" v-if="!running"
+            <v-btn @click="bacstackSettings = true" v-if="!running"
               >Settings</v-btn
             >
           </v-card-actions>
@@ -29,14 +31,17 @@
       <v-col cols="12" md="6">
         <base-card color="primary" icon="mdi-lan">
           <template #title>
-            BACnet Device / Interface
+            BACnet Device
           </template>
-          <v-card-text>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam
-            possimus voluptatum, tempore voluptatem accusantium libero! Soluta
-            eum quas voluptas, quasi quis minus odit tempora vitae perspiciatis
-            ullam illum nostrum ipsam.
+          <v-card-text v-if="this.eStore">
+            <div>Name: {{ getPropertyById(70) }}</div>
+            <div>Firmware: {{ getPropertyById(44) }}</div>
+            <div>Description: {{ getPropertyById(28) }}</div>
           </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn @click="deviceProperties = true">Edit</v-btn>
+          </v-card-actions>
         </base-card>
       </v-col>
     </v-row>
@@ -63,11 +68,11 @@
       type="error"
       @confirm="alertEvent($event)"
     />
-    <device-settings
-      v-if="deviceSettings"
-      :showDialog="deviceSettings"
-      :device="eStore"
-      @save="deviceSettingsEvent($event)"
+    <bac-stack-settings
+      v-if="bacstackSettings"
+      :showDialog="bacstackSettings"
+      :storedata="eStore"
+      @save="bacstackSettingsEvent($event)"
     />
     <add-datapoint
       v-if="addDatapoint"
@@ -78,7 +83,7 @@
 </template>
 
 <script>
-import DeviceSettings from "@/components/DeviceSettings.vue";
+import BacStackSettings from "@/components/BacStackSettings.vue";
 import { mapActions, mapGetters } from "vuex";
 import DatapointTree from "@/components/DatapointTree.vue";
 import AddDatapoint from "@/components/AddDatapoint.vue";
@@ -86,15 +91,16 @@ import AddDatapoint from "@/components/AddDatapoint.vue";
 export default {
   name: "Device",
   components: {
-    DeviceSettings,
     DatapointTree,
     AddDatapoint,
+    BacStackSettings,
   },
   data: () => ({
     alert: false,
     errorText: "",
     eStore: null,
-    deviceSettings: false,
+    bacstackSettings: false,
+    deviceProperties: false,
     addDatapoint: false,
     bacnetStackRunning: { state: true, color: "green" },
     bacnetStackStopped: { state: false, color: "red" },
@@ -131,9 +137,17 @@ export default {
       this.alert = false;
       this.errorText = "";
     },
-    deviceSettingsEvent(eStore) {
-      this.deviceSettings = false;
-      if(eStore) this.SET_ESTORE(eStore);
+    bacstackSettingsEvent(eStore) {
+      this.bacstackSettings = false;
+      if (eStore) this.SET_ESTORE(eStore);
+    },
+    getPropertyById(id) {
+      //TODO switch to computed val out of store
+      let d = this.eStore.dp.find((d) => d.oid === "8:0");
+      if (!d) return "No device yet";
+      return (
+        d.properties.find((p) => p.id === id).value || "Property not found"
+      );
     },
     ...mapActions(["READ_ESTORE", "SET_IS_RUNNING", "SET_ESTORE"]),
   },

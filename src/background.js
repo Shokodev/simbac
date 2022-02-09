@@ -1,10 +1,10 @@
-import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron';
-import { save, read, addDp, removeDp } from './background-store.js';
-import path from 'path';
-import fs from 'fs';
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
-import { object_types } from './bacnet/utils/type-helper.js';
-import log from './logger.js';
+import { app, BrowserWindow, ipcMain, globalShortcut } from "electron";
+import eStore from "./background-store.js";
+import path from "path";
+import fs from "fs";
+import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+import { object_types } from "./bacnet/utils/type-helper.js";
+import log from "./logger.js";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 //Create Window and load index.html & preload.js
@@ -60,49 +60,43 @@ app.whenReady().then(async () => {
       log.error("Vue Devtools failed to install:", e.toString());
     }
   }
-  globalShortcut.register('Alt+CommandOrControl+D', () => {
-    save("name", "device1");
-    save("port", 47808);
-    save("netInterface", "127.0.0.1");
-    save("deviceId", 1234);
-    save("vendorId", 7);
-    save("dp", [])  ;
-  })
+  globalShortcut.register("Alt+CommandOrControl+D", () => {
+    eStore.save("port", 47808);
+    eStore.save("bacnetId", 1234);
+    eStore.save("netInterface", "127.0.0.1");
+    eStore.save("dp", []);
+  });
   createWindow();
 });
 
-import BACnetDevice from './bacnet/bacnet-device.js';
-const device = new BACnetDevice();
-import bacnet from 'bacstack';
-import os from 'os';
+import ShokoStack from "./bacnet/shoko-stack.js";
+const shokoStack = new ShokoStack();
+import bacnet from "bacstack";
+import os from "os";
 
 ipcMain.on("GET_STORE", (event) => {
   event.reply("GET_STORE", {
-    name: read("name"),
-    port: read("port"),
-    deviceId: read("deviceId"),
-    vendorId: read("vendorId"),
-    netInterface: read("netInterface"),
-    isRunning: device.bacstack ? true : false,
+    port: eStore.read("port"),
+    bacnetId: eStore.read("bacnetId"),
+    netInterface: eStore.read("netInterface"),
+    isRunning: shokoStack.bacstack ? true : false,
     objectTypes: bacnet.enum.ObjectType,
-    supportedObjectTypes:getSupportedTypes(),
+    supportedObjectTypes: getSupportedTypes(),
     netInterfaces: os.networkInterfaces(),
-    dp: read("dp"),
+    dp: eStore.read("dp"),
   });
 });
 
 ipcMain.on("START_STACK", (event, payload) => {
   try {
     log.info("Save device settings");
-    save("name", payload.name);
-    save("port", parseInt(payload.port));
-    save("deviceId", parseInt(payload.deviceId));
-    save("vendorId", parseInt(payload.vendorId));
-    save("netInterface", payload.netInterface);
-    const result = device.start();
-    device.bacstack.whoIs();
+    eStore.save("port", parseInt(payload.port));
+    eStore.save("bacnetId", parseInt(payload.bacnetId));
+    eStore.save("netInterface", payload.netInterface);
+    const result = shokoStack.start();
+    shokoStack.bacstack.whoIs();
     // Read some datapoint
-/*     device.bacstack.readProperty(
+    /*     device.bacstack.readProperty(
       "192.168.1.130",
       { type: 0, instance: 0 },
       85,
@@ -123,7 +117,7 @@ ipcMain.on("START_STACK", (event, payload) => {
 ipcMain.on("ADD_DP", (event, payload) => {
   try {
     log.info(`Add datapoint: ${payload.oid}`);
-    addDp(payload);
+    eStore.addDp(payload);
     event.reply("ADD_DP", "OK");
   } catch (err) {
     event.reply("ADD_DP", err);
@@ -133,18 +127,18 @@ ipcMain.on("ADD_DP", (event, payload) => {
 ipcMain.on("REMOVE_DP", (event, payload) => {
   try {
     log.info(`Remove datapoint: ${payload.oid}`);
-    removeDp(payload);
+    eStore.removeDp(payload);
     event.reply("REMOVE_DP", "OK");
   } catch (err) {
     event.reply("REMOVE_DP", err);
   }
 });
 
-ipcMain.on("NEW_DP", async(event, payload) => {
+ipcMain.on("NEW_DP", async (event, payload) => {
   try {
     log.info(`Create new: ${payload}`);
     let obj = await import(`./bacnet/objects/${payload}.js`);
-    let instance = read("dp").reduce((a, v) => {
+    let instance = eStore.read("dp").reduce((a, v) => {
       if (object_types[v.oid.split(":")[0]] === payload) {
         a = 0;
         if (parseInt(v.oid.split(":")[1]) > a) {
@@ -164,17 +158,20 @@ ipcMain.on("NEW_DP", async(event, payload) => {
 
 ipcMain.on("STOP_STACK", (event, payload) => {
   log.info(payload);
-  let result = device.stop();
+  let result = shokoStack.stop();
   event.reply("STOP_STACK", result);
 });
 
 //TODO Check if path is correct when app is build
 const getSupportedTypes = () => {
   try {
-    let path = process.cwd() + '/src/bacnet/objects';
-    return fs.readdirSync(path).map(f=>f.replace('.js','')).filter(f=>f !== 'DEVICE');
-  } catch (err){
+    let path = process.cwd() + "/src/bacnet/objects";
+    return fs
+      .readdirSync(path)
+      .map((f) => f.replace(".js", ""))
+      .filter((f) => f !== "DEVICE");
+  } catch (err) {
     log.error(`Could not load supported object types from: ${path}`);
     return [];
   }
-}
+};

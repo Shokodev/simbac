@@ -1,6 +1,6 @@
 import bacnet from 'bacstack';
 import BacnetObject from '../bacnet-object.js';
-import { getObjectList } from '../../background-store';
+import eStore from '../../background-store';
 
 export default class Device extends BacnetObject {
   constructor(_instance = Number, storeProps = []) {
@@ -100,7 +100,7 @@ const props = [
         pidName:"OBJECT_LIST",
         type:bacnet.enum.ApplicationTags.OBJECTIDENTIFIER,
         //read what is in store while ini
-        value: getObjectList(),
+        value: eStore.getObjectList(),
     },
 
     {
