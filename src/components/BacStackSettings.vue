@@ -6,13 +6,6 @@
         <v-container>
           <v-row>
             <v-col cols="12" sm="6">
-              <v-text-field
-                v-model="data.name"
-                label="Device Name"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="6">
               <v-select
                 item-color="info"
                 :items="BACnetPorts"
@@ -39,15 +32,8 @@
             </v-col>
             <v-col cols="12" sm="6">
               <v-text-field
-                v-model="data.deviceId"
-                label="Device Id"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-text-field
-                v-model="data.vendorId"
-                label="Vendor Id"
+                v-model="data.bacnetId"
+                label="Bacnet ID"
                 required
               ></v-text-field>
             </v-col>
@@ -76,15 +62,15 @@
 </template>
 <script>
 export default {
-  name: "DeviceSettings",
+  name: "BacStackSettings",
   props: {
     showDialog: Boolean,
-    device: Object,
+    storedata: Object,
   },
   data() {
     return {
       dialog: this.showDialog,
-      data: this.device,
+      data: this.storedata,
       BACnetPorts: [
         { hex: "BAC0", dez: 47808 },
         { hex: "BAC1", dez: 47809 },
@@ -109,7 +95,7 @@ export default {
   },
   mounted() {
     this.port = this.BACnetPorts.find(
-      (element) => element.dez === this.device.port
+      (element) => element.dez === this.storedata.port
     );
   },
   methods: {
@@ -124,8 +110,8 @@ export default {
   computed: {
     getNetworkInterfaces() {
       let interfaces = [];
-      Object.keys(this.device.netInterfaces).forEach((key) => {
-        const node = this.device.netInterfaces[key].find(
+      Object.keys(this.storedata.netInterfaces).forEach((key) => {
+        const node = this.storedata.netInterfaces[key].find(
           (element) => element.family === "IPv4"
         );
         node &&

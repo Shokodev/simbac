@@ -1,10 +1,9 @@
-import bacnet from 'bacstack';
-import { object_types, pids } from './utils/type-helper.js';
-import log from '../logger.js';
-import { read } from '../background-store.js';
+import bacnet from "bacstack";
+import { object_types, pids } from "./utils/type-helper.js";
+import log from "../logger.js";
+import eStore from "../background-store.js";
 
 function createStack() {
-
   /* {
   port: 47809,                          // Use BAC1 as communication port
   interface: '192.168.251.10',          // Listen on a specific interface
@@ -12,18 +11,19 @@ function createStack() {
   adpuTimeout: 6000                     // Wait twice as long for response
   } */
   const bacstack = new bacnet({
-    port: read("port"),
-    interface: read("netInterface")
+    port: eStore.read("port"),
+    interface: eStore.read("netInterface"),
   });
 
   bacstack.on("whoIs", (data) => {
     log.info(`WhoIs request from: ${data.address}`);
-    if (data.lowLimit && data.lowLimit > read("deviceId")) return;
-    if (data.highLimit && data.highLimit < read("deviceId")) return;
+    let deviceid = eStore.read("deviceId");
+    if (data.lowLimit && data.lowLimit > deviceid) return;
+    if (data.highLimit && data.highLimit < deviceid) return;
     bacstack.iAmResponse(
-      read("deviceId"),
+      deviceid,
       bacnet.enum.Segmentation.SEGMENTATION_BOTH,
-      read("vendorId")
+      deviceid
     );
   });
 
@@ -40,11 +40,13 @@ function createStack() {
     log.info(
       `Read property ${prop.str} (${prop.id}) request on ${obj.type} (${obj.inst}) from ${data.address}`
     );
-    let object = read("dp").find(
-      (datapoint) =>
-        datapoint.oid ===
-        `${data.request.objectId.type}:${data.request.objectId.instance}`
-    );
+    let object = eStore
+      .read("dp")
+      .find(
+        (datapoint) =>
+          datapoint.oid ===
+          `${data.request.objectId.type}:${data.request.objectId.instance}`
+      );
     if (!object) {
       log.debug(`Object ${obj.type} (${obj.inst}) not found, return Error`);
       return bacstack.errorResponse(
@@ -86,11 +88,13 @@ function createStack() {
   });
 
   bacstack.on("writeProperty", (data) => {
-    let object = read("dp").find(
-      (datapoint) =>
-        datapoint.oid ===
-        `${data.request.objectId.type}${data.request.objectId.instance}`
-    );
+    let object = eStore
+      .read("dp")
+      .find(
+        (datapoint) =>
+          datapoint.oid ===
+          `${data.request.objectId.type}${data.request.objectId.instance}`
+      );
     if (!object)
       return bacstack.errorResponse(
         data.address,
@@ -128,17 +132,19 @@ function createStack() {
 
   bacstack.on("whoHas", (data) => {
     log.info(`WhoHas request from: ${data.address}`);
-    if (data.lowLimit && data.lowLimit > read("deviceId")) return;
-    if (data.highLimit && data.highLimit < read("deviceId")) return;
+    if (data.lowLimit && data.lowLimit > eStore.read("deviceId")) return;
+    if (data.highLimit && data.highLimit < eStore.read("deviceId")) return;
     if (data.objId) {
-      let object = read("dp").find(
-        (datapoint) =>
-          datapoint.oid ===
-          `${data.request.objectId.type}${data.request.objectId.instance}`
-      );
+      let object = eStore
+        .read("dp")
+        .find(
+          (datapoint) =>
+            datapoint.oid ===
+            `${data.request.objectId.type}${data.request.objectId.instance}`
+        );
       if (!object) return;
       bacstack.iHaveResponse(
-        read("deviceId"),
+        eStore.read("deviceId"),
         { type: data.objId.type, instance: data.objId.instance },
         object[77][0].value
       );
@@ -146,7 +152,7 @@ function createStack() {
     if (data.objName) {
       // TODO: Find stuff...
       bacstack.iHaveResponse(
-        read("deviceId"),
+        eStore.read("deviceId"),
         { type: 1, instance: 1 },
         "test"
       );
