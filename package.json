@@ -8,6 +8,9 @@
     "email": "info@shokodev.ch",
     "url": "https://shokodev.ch/"
   },
+  "workspaces": [
+    "testdevice/*"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

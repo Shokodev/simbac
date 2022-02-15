@@ -1,0 +1,13 @@
+{
+  "name": "testdevice",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "license": "MIT",
+  "dependencies": {
+    "bacstack": "^0.0.1-beta.14"
+  },
+  "scripts": {
+    "local": "node index.js"
+  }
+}
