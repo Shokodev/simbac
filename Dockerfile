@@ -1,5 +1,5 @@
 FROM node:latest
 WORKDIR /usr/src/app
-COPY ../ .
+COPY . .
 WORKDIR /usr/src/app/testdevice
 CMD [ "node", "idle.js" ]

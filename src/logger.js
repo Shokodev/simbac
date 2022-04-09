@@ -1,46 +1,50 @@
-import Transport from 'winston-transport';
-import { BrowserWindow } from 'electron';
-import pkg from 'winston';
-const { createLogger, transports, format } = pkg;
+import { BrowserWindow } from "electron";
 
-class ConsoleFrontend extends Transport {
-  constructor(opts) {
-    super(opts);
-  }
+const Level = {
+  trace: "TRACE",
+  debug: "DEBUG",
+  info: "INFO",
+  warn: "WARN",
+  error: "ERROR",
+  fatal: "FATAL",
+};
 
-  log(info, callback) {
-    setImmediate(() => {
-      this.emit("logged", info);
-    });
-    let win = BrowserWindow.getFocusedWindow();
-    win.webContents.send("CONSOLE_MSG", {
-      level: info.level,
-      message: info.message,
-      timestamp: info.timestamp,
-    });
-    if (callback) {
-      callback();
-    }
-  }
+function streamToFrontend(log) {
+  let win = BrowserWindow.getFocusedWindow();
+  win.webContents.send("CONSOLE_MSG", {
+    level: log.level,
+    message: log.message,
+    timestamp: log.timestamp,
+  });
 }
 
-const logger = createLogger({
-  format: format.combine(
-    format.timestamp({ format: "YYYY-MM-DD HH:mm:ss:ms" }),
-    format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
-  ),
-  level: "debug",
-  transports: [
-    new transports.File({
-      filename: "./logs/log.log",
-      json: false,
-      maxsize: 5242880,
-      maxFiles: 1,
-    }),
-    new transports.Console(),
-    new ConsoleFrontend(),
-  ],
+function getTimeStamp() {
+  let now = new Date();
+  const twoDigi = (num) => (num.length == 1 ? 0 + num.toString() : num);
+  return (
+    `${now.getFullYear()}-${twoDigi(now.getMonth())}-${twoDigi(now.getDay())}` +
+    ` ${twoDigi(now.getHours())}:${twoDigi(now.getMinutes())}:${twoDigi(
+      now.getSeconds()
+    )}`
+  );
+}
+
+const logger = {};
+
+Object.keys(Level).forEach((level) => {
+  logger[level] = (msg) => {
+    try {
+      let log = {
+        level: Level[level],
+        message: msg,
+        timestamp: getTimeStamp(),
+      };
+      console.log(`${log.timestamp}|${log.level}|${log.message}`);
+      streamToFrontend(log);
+    } catch (err) {
+      console.log(`Logger ERROR: ${err}`);
+    }
+  };
 });
 
 export default logger;
-

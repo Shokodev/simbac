@@ -20,13 +20,13 @@ function createStack() {
     let deviceid = eStore.read("deviceId");
     if (data.lowLimit && data.lowLimit > deviceid) return;
     if (data.highLimit && data.highLimit < deviceid) return;
+    log.debug(`Respnose with IAM[${deviceid}]`);
     bacstack.iAmResponse(
       deviceid,
       bacnet.enum.Segmentation.SEGMENTATION_BOTH,
       deviceid
     );
   });
-
   //TODO DEFINE ERROR RESPONSE
   bacstack.on("readProperty", (data) => {
     let prop = {
@@ -88,14 +88,29 @@ function createStack() {
   });
 
   bacstack.on("writeProperty", (data) => {
+    console.log(data.request.value);
+    let prop = {
+      id: data.request.value.property.id,
+      str: pids[data.request.value.property.id],
+      val: data.request.value.value,
+      valType: bacnet.enum.ApplicationTags[data.request.value.type]
+    };
+    let obj = {
+      inst: data.request.objectId.instance,
+      type: object_types[data.request.objectId.type],
+    };
+    log.info(
+      `Write property request for: ${prop.str} (${prop.id}) on ${obj.type} (${obj.inst}) with (${prop.valType}) value [${prop.val}]  from ${data.address}`
+    );
     let object = eStore
       .read("dp")
       .find(
         (datapoint) =>
           datapoint.oid ===
-          `${data.request.objectId.type}${data.request.objectId.instance}`
+          `${obj.type}${obj.inst}`
       );
-    if (!object)
+    if (!object){
+      log.debug(`Object ${obj.type} (${obj.inst}) not found, return Error`);
       return bacstack.errorResponse(
         data.address,
         data.service,
@@ -103,6 +118,7 @@ function createStack() {
         bacnet.enum.ErrorClasses.ERROR_CLASS_OBJECT,
         bacnet.enum.ErrorCodes.ERROR_CODE_UNKNOWN_OBJECT
       );
+    }
     let property = object[data.request.property.id];
     if (!property)
       return bacstack.errorResponse(

@@ -22,7 +22,7 @@ As soon the container is started you can ssh in it and run `node index.js` in th
 |-|-|-|-|
 |`whois`|{addr} `optional`|`whois` or `whois 192.168.0.44`|sends a whoIs to broadcast addr
 |`read`|{addr} {objectidentifier} {propertyidentifier}|`read 192.168.0.44 0:1 85`|sends a read property request|
-|`write`|{addr} {objectidentifier} {propertyidentifier} {property value type} {value}|`read 192.168.0.44 0:1 85 4 1.7`|sends a write property request|
+|`write`|{addr} {objectidentifier} {propertyidentifier} {property value type} {value}|`write 192.168.0.44 0:1 85 4 1.7`|sends a write property request|
 
 some property value types:
   - BOOLEAN = 1

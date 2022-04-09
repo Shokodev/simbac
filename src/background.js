@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, globalShortcut } from "electron";
 import eStore from "./background-store.js";
 import path from "path";
 import fs from "fs";
+import bacnet from "bacstack";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import { object_types } from "./bacnet/utils/type-helper.js";
 import log from "./logger.js";
@@ -71,7 +72,6 @@ app.whenReady().then(async () => {
 
 import ShokoStack from "./bacnet/shoko-stack.js";
 const shokoStack = new ShokoStack();
-import bacnet from "bacstack";
 import os from "os";
 
 ipcMain.on("GET_STORE", (event) => {
@@ -96,8 +96,8 @@ ipcMain.on("START_STACK", (event, payload) => {
     const result = shokoStack.start();
     shokoStack.bacstack.whoIs();
     // Read some datapoint
-    /*     device.bacstack.readProperty(
-      "192.168.1.130",
+    /* shokoStack.bacstack.readProperty(
+      "192.168.0.66",
       { type: 0, instance: 0 },
       85,
       (err, data) => {
@@ -107,7 +107,17 @@ ipcMain.on("START_STACK", (event, payload) => {
           log.info(`Found value: ${data.values[0].value}`);
         }
       }
-    );  */
+    );
+    shokoStack.bacstack.writeProperty(
+      "192.168.0.66",
+      { type: 3, instance: 0 },
+      85,
+      [{ type: bacnet.enum.ApplicationTags.ENUMERATED, value: bacnet.enum.BinaryPV.ACTIVE }],
+      (err, data) => {
+        console.log(err);
+        console.log(data);
+      }
+    ); */
     event.reply("START_STACK", result);
   } catch (err) {
     event.reply("START_STACK", err);

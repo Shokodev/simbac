@@ -105,9 +105,9 @@ const writeprop = async (s, cb) => {
   try {
     bacstack.writeProperty(
       s[1],
-      { type: s[2].split(":")[0], instance: s[2].split(":")[1] },
+      { type: parseInt(s[2].split(":")[0]), instance: parseInt(s[2].split(":")[1]) },
       s[3],
-      [{ type: parseInt(s[4]), value: s[5] }],
+      [{ type: parseInt(s[4]), value: parseInt(s[5]) }],
       (err, data) => {
         if (err) {
           cb(`ERR::${err}`);

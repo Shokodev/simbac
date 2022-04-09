@@ -9,7 +9,7 @@
           <div class="d-flex justifiy-space-between flex-wrap">
             <v-checkbox
               v-model="level"
-              value="error"
+              value="ERROR"
               label="Error"
               color="red"
               class="mr-2"
@@ -17,7 +17,7 @@
             </v-checkbox>
             <v-checkbox
               v-model="level"
-              value="warn"
+              value="WARN"
               label="Warning"
               color="orange lighten-2"
               class="mr-2"
@@ -25,7 +25,7 @@
             </v-checkbox>
             <v-checkbox
               v-model="level"
-              value="info"
+              value="INFO"
               label="Info"
               color="info"
               class="mr-2"
@@ -33,9 +33,17 @@
             </v-checkbox>
             <v-checkbox
               v-model="level"
-              value="debug"
+              value="DEBUG"
               label="Debug"
               color="indigo"
+              class="mr-2"
+            >
+            </v-checkbox>
+            <v-checkbox
+              v-model="level"
+              value="TRACE"
+              label="Trace"
+              color="teal"
             >
             </v-checkbox>
           </div>
@@ -114,10 +122,11 @@ export default {
   methods: {
     getColor(level) {
       const colors = {
-        error: "red",
-        warn: "orange lighten-2",
-        info: "info",
-        debug: "indigo",
+        ERROR: "red",
+        WARN: "orange lighten-2",
+        INFO: "info",
+        DEBUG: "indigo",
+        TRACE: "teal"
       };
       return colors[level];
     },
