@@ -1,5 +1,6 @@
 FROM node:latest
 WORKDIR /usr/src/app
-COPY ../ .
-WORKDIR /usr/src/app/testdevice
+COPY package*.json ./
+RUN npm install
+COPY . .
 CMD [ "node", "idle.js" ]

@@ -81,6 +81,10 @@
             >
               {{ item.level }}
             </v-chip>
+            <!--TODO, create settings for Timestamp formatting -->
+          </template>
+                    <template v-slot:item.timestamp="{ item }">
+            {{new Date(item.timestamp).toGMTString().replace('GMT','')}}
           </template>
         </v-data-table>
       </base-card>

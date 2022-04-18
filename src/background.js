@@ -107,17 +107,18 @@ ipcMain.on("START_STACK", (event, payload) => {
           log.info(`Found value: ${data.values[0].value}`);
         }
       }
-    );
+    ); */
     shokoStack.bacstack.writeProperty(
       "192.168.0.66",
       { type: 3, instance: 0 },
       85,
       [{ type: bacnet.enum.ApplicationTags.ENUMERATED, value: bacnet.enum.BinaryPV.ACTIVE }],
+      {priority:0},
       (err, data) => {
         console.log(err);
         console.log(data);
       }
-    ); */
+    );
     event.reply("START_STACK", result);
   } catch (err) {
     event.reply("START_STACK", err);

@@ -1,11 +1,16 @@
 import bacnet from "bacstack";
 
-let object_types = Object.keys(bacnet.enum.ObjectType).reduce((a, v) => {
+const value_types = Object.keys(bacnet.enum.ApplicationTags).reduce((a, v) => {
+  a[bacnet.enum.ApplicationTags[v]] = v;
+  return a;
+}, {});
+
+const object_types = Object.keys(bacnet.enum.ObjectType).reduce((a, v) => {
   a[bacnet.enum.ObjectType[v]] = v;
   return a;
 }, {});
 
-let pids = Object.keys(bacnet.enum.PropertyIdentifier).reduce((a, v) => {
+const pids = Object.keys(bacnet.enum.PropertyIdentifier).reduce((a, v) => {
   a[bacnet.enum.PropertyIdentifier[v]] = v;
   return a;
 }, {});
@@ -16,4 +21,4 @@ const viewDepth = {
   all: 2,
 };
 
-export { object_types, pids, viewDepth };
+export { object_types, pids, viewDepth, value_types };

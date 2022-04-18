@@ -1,5 +1,5 @@
 import bacnet from "bacstack";
-import { object_types, pids } from "./utils/type-helper.js";
+import { object_types, pids,value_types} from "./utils/type-helper.js";
 import log from "../logger.js";
 import eStore from "../background-store.js";
 
@@ -88,60 +88,64 @@ function createStack() {
   });
 
   bacstack.on("writeProperty", (data) => {
-    console.log(data.request.value);
+    console.log(data.request);
     let prop = {
       id: data.request.value.property.id,
+      index: data.request.value.property.index,
       str: pids[data.request.value.property.id],
-      val: data.request.value.value,
-      valType: bacnet.enum.ApplicationTags[data.request.value.type]
+      val: data.request.value.value[0].value,
+      valType: value_types[data.request.value.value[0].type]
     };
     let obj = {
       inst: data.request.objectId.instance,
-      type: object_types[data.request.objectId.type],
+      typeText: object_types[data.request.objectId.type],
+      type: data.request.objectId.type
     };
     log.info(
-      `Write property request for: ${prop.str} (${prop.id}) on ${obj.type} (${obj.inst}) with (${prop.valType}) value [${prop.val}]  from ${data.address}`
+      `Write property request for: ${prop.str} (${prop.id}) on ${obj.typeText} (${obj.inst}) with (${prop.valType}) value [${prop.val}]  from ${data.address}`
     );
-    let object = eStore
+    let storeObject = eStore
       .read("dp")
       .find(
         (datapoint) =>
           datapoint.oid ===
-          `${obj.type}${obj.inst}`
+          `${obj.type}:${obj.inst}`
       );
-    if (!object){
-      log.debug(`Object ${obj.type} (${obj.inst}) not found, return Error`);
+    if (!storeObject){
+      log.debug(`Object ${obj.typeText} (${obj.inst}) not found, return Error`);
       return bacstack.errorResponse(
         data.address,
         data.service,
         data.invokeId,
-        bacnet.enum.ErrorClasses.ERROR_CLASS_OBJECT,
-        bacnet.enum.ErrorCodes.ERROR_CODE_UNKNOWN_OBJECT
+        bacnet.enum.ErrorClass.ERROR_CLASS_OBJECT,
+        bacnet.enum.ErrorCode.ERROR_CODE_UNKNOWN_OBJECT
       );
     }
-    let property = object[data.request.property.id];
-    if (!property)
+    let storeProp = storeObject.properties.find(p=>p.id=prop.id);
+    if (!storeProp)
       return bacstack.errorResponse(
         data.address,
         data.service,
         data.invokeId,
-        bacnet.enum.ErrorClasses.ERROR_CLASS_PROPERTY,
-        bacnet.enum.ErrorCodes.ERROR_CODE_UNKNOWN_PROPERTY
+        bacnet.enum.ErrorClass.ERROR_CLASS_PROPERTY,
+        bacnet.enum.ErrorCode.ERROR_CODE_UNKNOWN_PROPERTY
       );
-    if (data.request.property.index === 0xffffffff) {
-      property = data.request.value.value;
+    if (prop.index === 0xffffffff) {
+      console.log(`Index is 0xffffffff`)
+      //storeProp = data.request.value.value;
       bacstack.simpleAckResponse(data.address, data.service, data.invokeId);
     } else {
-      let slot = property[data.request.property.index];
+      let slot = storeProp[data.request.property.index];
       if (!slot)
         return bacstack.errorResponse(
           data.address,
           data.service,
           data.invokeId,
-          bacnet.enum.ErrorClasses.ERROR_CLASS_PROPERTY,
-          bacnet.enum.ErrorCodes.ERROR_CODE_INVALID_ARRAY_INDEX
+          bacnet.enum.ErrorClass.ERROR_CLASS_PROPERTY,
+          bacnet.enum.ErrorCode.ERROR_CODE_INVALID_ARRAY_INDEX
         );
       slot = data.request.value.value[0];
+      //Simple ack response does not work as write response
       bacstack.simpleAckResponse(data.address, data.service, data.invokeId);
     }
   });
